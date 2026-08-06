@@ -34,15 +34,7 @@
     .modal-header { display: flex; justify-content: space-between; padding: 20px; border-bottom: 1px solid #eee; background: #f8f8f8; }
     .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: red; }
     
-    .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-    .cart-item img { width: 50px; height: 50px; border-radius: 5px; }
-    .qty-btn { background: #eee; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
-    
-    .cart-footer { padding: 20px; border-top: 1px solid #eee; background: #fff; }
-    .checkout-btn { background: #ff6b00; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px;}
-    .whatsapp-btn { background: #25D366; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; display: block; text-align: center; }
-
+    .
     /* Checkout Form Styles */
     .checkout-form { padding: 20px; overflow-y: auto; flex: 1; }
     .form-group { margin-bottom: 15px; }
@@ -79,18 +71,19 @@
 </section>
 
 <!-- Cart Modal -->
-<div class="modal" id="cart-modal">
-    <div class="modal-header">
-        <h2>Your Cart</h2>
-        <button class="close-btn" onclick="toggleModal('cart-modal')">✖</button>
-    </div>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-footer">
-        <h3 style="margin-bottom: 10px;">Total: ₹<span id="total-price">0</span></h3>
-        <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
-        <button class="whatsapp-btn" onclick="orderViaWhatsApp()">Order via WhatsApp</button>
+<<!-- Order Success Modal -->
+<div id="order-success-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:30px; border-radius:12px; text-align:center; max-width:400px; width:90%; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+        <div style="font-size:50px; color:#28a745; margin-bottom:10px;">✅</div>
+        <h2 style="color:#333; margin-bottom:10px;">Order Placed Successfully!</h2>
+        <p style="color:#666; font-size:14px; margin-bottom:20px;">Thank you for shopping with <b>UK TRENDS</b>. Your order has been placed and is being processed.</p>
+        <div id="success-order-details" style="background:#f8f9fa; padding:10px; border-radius:8px; font-size:13px; color:#444; margin-bottom:20px; text-align:left;">
+            <!-- Order details will appear here -->
+        </div>
+        <button onclick="closeOrderSuccess()" style="background:#ff6b00; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">Continue Shopping</button>
     </div>
 </div>
+    
 
 <!-- Checkout Modal (Formspree) -->
 <div class="modal" id="checkout-modal">
@@ -258,19 +251,54 @@ function prepareFormspreeData() {
     let total = document.getElementById("total-price").innerText;
     document.getElementById("form-order-details").value = orderText;
     document.getElementById("form-total-amount").value = "₹" + total;
+}function orderViaWhatsApp() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    
+    // Calculate total amount
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.qty;
+    });
+
+    // Generate Flipkart-style Order ID
+    let orderId = "UKT" + Math.floor(100000 + Math.random() * 900000);
+
+    // Show details inside the success box
+    let detailsBox = document.getElementById("success-order-details");
+    if(detailsBox) {
+        detailsBox.innerHTML = `
+            <b>Order ID:</b> #${orderId}<br>
+            <b>Payment Mode:</b> Cash on Delivery / Online<br>
+            <b>Total Amount:</b> ₹${total}
+        `;
+    }
+
+    // Clear the cart
+    cart = [];
+    saveCart();
+    updateCartUI();
+
+    // Close modals
+    closeModal('cart-modal');
+    closeModal('checkout-modal');
+
+    // Open Success Modal
+    let successModal = document.getElementById("order-success-modal");
+    if(successModal) {
+        successModal.style.display = "flex";
+    }
 }
 
-// For WhatsApp Direct Order
-function orderViaWhatsApp() {
-    if(cart.length === 0) return alert("Your cart is empty!");
-    let total = document.getElementById("total-price").innerText;
-    let message = "Hello UK TRENDS! I want to order:%0A%0A";
-    cart.forEach(item => {
-        message += `👉 ${item.name} (x${item.qty}) - ₹${item.price * item.qty}%0A`;
-    });
-    message += `%0A*Total Amount: ₹${total}*%0A%0APlease confirm my order.`;
-    window.open(`https://wa.me/917052561304?text=${message}`, '_blank');
+function closeOrderSuccess() {
+    let successModal = document.getElementById("order-success-modal");
+    if(successModal) {
+        successModal.style.display = "none";
+    }
 }
+    
 
 // Initialize on page load
 renderProducts();
