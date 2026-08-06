@@ -223,7 +223,7 @@ function updateCartUI() {
                 <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
             </div>
         </div>
-        `;
+        `; 
     });
     document.getElementById("cart-items").innerHTML = cartHTML || "<p style='text-align:center;'>Cart is empty.</p>";
     document.getElementById("total-price").innerText = total;
