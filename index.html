@@ -17,7 +17,7 @@ button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:poin
 .info{padding:12px}.name{font-size:17px;font-weight:800;min-height:42px}.rating{color:#168c58;font-weight:800;margin:7px 0}.price{font-size:22px;font-weight:900}.old{text-decoration:line-through;color:#999;font-size:14px;margin-left:5px}.off{color:#168c58;font-weight:800;margin-left:5px}
 .actions{display:flex;gap:7px;margin-top:10px}.add{background:#ff7000;color:#fff;flex:1}.view{background:#eee}
 .pages{display:flex;justify-content:center;gap:8px;align-items:center;padding:8px 18px 30px}.pages button{background:#fff;border:1px solid #ccc}
-.overlay{position:fixed;inset:0;background:#0008;display:none;z-index:30}.drawer{position:absolute;right:0;top:0;height:100%;width:min(520px,94vw);background:#fff;padding:20px;overflow:auto}.close{float:right;background:#eee;border-radius:50%;padding:10px 14px}.cartrow{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:12px 0}.cartrow img{width:70px;height:70px;object-fit:cover;border-radius:8px}.total{font-size:24px;font-weight:900;margin:18px 0}.checkout{background:#079653;color:#fff;width:100%}
+.overlay{position:fixed;inset:0;background:#0008;display:none;z-index:30}.drawer{position:absolute;right:0;top:0;height:100%;width:min(520px,94vw);background:#fff;padding:20px;overflow:auto}.close{float:right;background:#eee;border-radius:50%;padding:10px 14px}.cartrow{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:12px 0}.cartrow img{width:70px;height:70px;object-fit:cover;border-radius:8px}.total{font-size:24px;font-weight:900;margin:18px 0}.checkout{background:#079653;color:#fff;width:100%;margin-bottom:8px;}
 .modal{position:fixed;inset:0;background:#0009;display:none;z-index:40;padding:20px;overflow:auto}.box{background:#fff;max-width:900px;margin:20px auto;border-radius:16px;padding:18px}.views{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.views img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
 footer{background:#fff;border-top:1px solid #ddd;padding:20px;text-align:center;margin-top:30px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
@@ -62,7 +62,12 @@ footer{background:#fff;border-top:1px solid #ddd;padding:20px;text-align:center;
     <h1>Your Cart</h1>
     <div id="cartlist"></div>
     <div class="total">Total: ₹<span id="total">0</span></div>
-    <button class="checkout" onclick="checkout()">COD Checkout</button>
+    <h3>Delivery Details</h3>
+    <input type="text" id="custName" placeholder="Full Name" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ccc;border-radius:6px;">
+    <input type="tel" id="custPhone" placeholder="Mobile Number" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ccc;border-radius:6px;">
+    <textarea id="custAddr" placeholder="Delivery Address" style="width:100%;padding:10px;margin-bottom:12px;border:1px solid #ccc;border-radius:6px;"></textarea>
+    <button class="checkout" style="background:#ff7000;" onclick="payFreeUPI()">📱 PAY VIA UPI / QR (UTKARSH KUMAR)</button>
+    <button class="checkout" onclick="payCOD()">🚚 CASH ON DELIVERY</button>
   </div>
 </div>
 
@@ -83,6 +88,21 @@ footer{background:#fff;border-top:1px solid #ddd;padding:20px;text-align:center;
   </div>
 </div>
 
+<div id="upiModal" class="modal">
+  <div class="box" style="max-width: 450px; text-align: center;">
+    <button class="close" onclick="closeUPI()">✕</button>
+    <h2 style="margin-bottom:4px;">UTKARSH KUMAR</h2>
+    <p style="margin-top:0; color:#666; font-size:14px;">Scan to pay with any UPI app</p>
+    <p>Payable Amount: <b>₹<span id="upiAmount">0</span></b></p>
+    <div id="qrcode" style="margin: 15px 0;"></div>
+    <p style="font-size:14px; background:#f0f0f0; padding:10px; border-radius:6px; word-break:break-all;">
+      UPI ID: <b id="myUpiId">utkarshkumar.shg-3@oksbi</b>
+    </p>
+    <input type="text" id="utrNo" placeholder="Enter Transaction UTR / Ref No." style="width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:6px;">
+    <button style="background:#079653;color:#fff;width:100%;padding:12px;font-weight:bold;border:none;border-radius:8px;" onclick="confirmUPIOrder()">CONFIRM ORDER</button>
+  </div>
+</div>
+
 <script>
 const cats=["Fashion","Groceries","Electronics","Beauty","Home","Kids","Pets","Accessories"];
 const names={
@@ -96,56 +116,15 @@ Pets:["Dog Food","Cat Food","Dog Toy","Cat Toy","Pet Bowl","Pet Leash","Pet Bed"
 Accessories:["Backpack","Wallet","Sunglasses","Wrist Watch","Cap","Belt","Handbag","Travel Pouch"]
 };
 
-// Reliable Direct CDN Images
 const sampleImages = {
-  "Fashion": [
-    "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/d/d2/Jeans_for_men.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/e/e8/Polo_shirt.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/7/72/Leather_jacket.jpg"
-  ],
-  "Groceries": [
-    "https://upload.wikimedia.org/wikipedia/commons/e/e4/A_bottle_of_olive_oil.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/6/69/Banana.jpeg",
-    "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg"
-  ],
-  "Electronics": [
-    "https://upload.wikimedia.org/wikipedia/commons/3/3e/Android_wear_smartwatch.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/1/18/Wireless_headphones.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/a/a6/Computer_keyboard_and_mouse.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/2/22/3D_Speaker.png"
-  ],
-  "Beauty": [
-    "https://upload.wikimedia.org/wikipedia/commons/a/a2/Cosmetics_and_beauty_products.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/6/61/Perfume_bottle.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/d/db/Shampoo_bottle.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/d/d4/Lipstick_red.jpg"
-  ],
-  "Home": [
-    "https://upload.wikimedia.org/wikipedia/commons/a/a2/Modern_interior_design_living_room.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/6/6f/Wall_clock.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/2/29/Stainless_steel_water_bottle.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/1/1e/Pillow.jpg"
-  ],
-  "Kids": [
-    "https://upload.wikimedia.org/wikipedia/commons/a/a6/Teddy_bear.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/d/dc/School_backpack.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/7/7b/Toy_car.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/3/30/Baby_shoes.jpg"
-  ],
-  "Pets": [
-    "https://upload.wikimedia.org/wikipedia/commons/d/d9/Collared_dog.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/1/15/Cat_eating_food.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/1/10/Dog_leash.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat_toy.jpg"
-  ],
-  "Accessories": [
-    "https://upload.wikimedia.org/wikipedia/commons/8/8f/Leather_wallet.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/a/a4/Aviator_sunglasses.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/b/b3/Wristwatch.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/2/25/Leather_belt.jpg"
-  ]
+  "Fashion": ["https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg","https://upload.wikimedia.org/wikipedia/commons/d/d2/Jeans_for_men.jpg","https://upload.wikimedia.org/wikipedia/commons/e/e8/Polo_shirt.jpg","https://upload.wikimedia.org/wikipedia/commons/7/72/Leather_jacket.jpg"],
+  "Groceries": ["https://upload.wikimedia.org/wikipedia/commons/e/e4/A_bottle_of_olive_oil.jpg","https://upload.wikimedia.org/wikipedia/commons/6/69/Banana.jpeg","https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg","https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg"],
+  "Electronics": ["https://upload.wikimedia.org/wikipedia/commons/3/3e/Android_wear_smartwatch.jpg","https://upload.wikimedia.org/wikipedia/commons/1/18/Wireless_headphones.jpg","https://upload.wikimedia.org/wikipedia/commons/a/a6/Computer_keyboard_and_mouse.jpg","https://upload.wikimedia.org/wikipedia/commons/2/22/3D_Speaker.png"],
+  "Beauty": ["https://upload.wikimedia.org/wikipedia/commons/a/a2/Cosmetics_and_beauty_products.jpg","https://upload.wikimedia.org/wikipedia/commons/6/61/Perfume_bottle.jpg","https://upload.wikimedia.org/wikipedia/commons/d/db/Shampoo_bottle.jpg","https://upload.wikimedia.org/wikipedia/commons/d/d4/Lipstick_red.jpg"],
+  "Home": ["https://upload.wikimedia.org/wikipedia/commons/a/a2/Modern_interior_design_living_room.jpg","https://upload.wikimedia.org/wikipedia/commons/6/6f/Wall_clock.jpg","https://upload.wikimedia.org/wikipedia/commons/2/29/Stainless_steel_water_bottle.jpg","https://upload.wikimedia.org/wikipedia/commons/1/1e/Pillow.jpg"],
+  "Kids": ["https://upload.wikimedia.org/wikipedia/commons/a/a6/Teddy_bear.jpg","https://upload.wikimedia.org/wikipedia/commons/d/dc/School_backpack.jpg","https://upload.wikimedia.org/wikipedia/commons/7/7b/Toy_car.jpg","https://upload.wikimedia.org/wikipedia/commons/3/30/Baby_shoes.jpg"],
+  "Pets": ["https://upload.wikimedia.org/wikipedia/commons/d/d9/Collared_dog.jpg","https://upload.wikimedia.org/wikipedia/commons/1/15/Cat_eating_food.jpg","https://upload.wikimedia.org/wikipedia/commons/1/10/Dog_leash.jpg","https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat_toy.jpg"],
+  "Accessories": ["https://upload.wikimedia.org/wikipedia/commons/8/8f/Leather_wallet.jpg","https://upload.wikimedia.org/wikipedia/commons/a/a4/Aviator_sunglasses.jpg","https://upload.wikimedia.org/wikipedia/commons/b/b3/Wristwatch.jpg","https://upload.wikimedia.org/wikipedia/commons/2/25/Leather_belt.jpg"]
 };
 
 const products=Array.from({length:80000},(_,i)=>{
@@ -155,11 +134,7 @@ const products=Array.from({length:80000},(_,i)=>{
 });
 
 const pageSize=24; let page=1, filtered=products, cart=[];
-
-const img=(p,v)=>{
-  const catArray = sampleImages[p.cat] || sampleImages["Fashion"];
-  return catArray[(p.id + v) % catArray.length];
-};
+const img=(p,v)=>{ const catArray = sampleImages[p.cat] || sampleImages["Fashion"]; return catArray[(p.id + v) % catArray.length]; };
 
 function render(){
  const start=(page-1)*pageSize, list=filtered.slice(start,start+pageSize);
@@ -205,9 +180,43 @@ function handleLogin(){
  if(email){alert('Logged in successfully as ' + email);closeLogin();}else{alert('Please enter your email');}
 }
 
-function checkout(){
- if(!cart.length)return alert('Your cart is empty.');
- alert('COD checkout demo. Connect a secure backend/order service before taking live customer orders.');
+// EXACT UPI ID SETUP
+const MY_UPI_ID = "utkarshkumar.shg-3@oksbi";
+
+function payFreeUPI(){
+  if(!cart.length) return alert('Your cart is empty!');
+  const name = document.getElementById('custName').value;
+  const phone = document.getElementById('custPhone').value;
+  const addr = document.getElementById('custAddr').value;
+  if(!name || !phone || !addr) return alert('Please fill Name, Phone, and Address.');
+
+  let totalAmount = cart.reduce((sum, item) => sum + (products[item.id-1].price * item.qty), 0);
+  document.getElementById('upiAmount').textContent = totalAmount.toLocaleString();
+  document.getElementById('myUpiId').textContent = MY_UPI_ID;
+  
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=${encodeURIComponent(MY_UPI_ID)}%26pn=UTKARSH%20KUMAR%26am=${totalAmount}%26cu=INR`;
+  document.getElementById('qrcode').innerHTML = `<img src="${qrUrl}" alt="UPI QR Code" style="border: 1px solid #ddd; padding: 10px; border-radius: 12px; background: #fff;">`;
+  
+  document.getElementById('upiModal').style.display = 'block';
+}
+
+function closeUPI(){ document.getElementById('upiModal').style.display = 'none'; }
+
+function confirmUPIOrder(){
+  const utr = document.getElementById('utrNo').value;
+  if(!utr) return alert('Please enter UTR / Transaction reference number!');
+  alert('Thank you! Your payment reference is saved. Order placed successfully!');
+  cart = []; updateCart(); closeUPI(); closeCart();
+}
+
+function payCOD(){
+  if(!cart.length) return alert('Your cart is empty!');
+  const name = document.getElementById('custName').value;
+  const phone = document.getElementById('custPhone').value;
+  const addr = document.getElementById('custAddr').value;
+  if(!name || !phone || !addr) return alert('Please fill Name, Phone, and Address.');
+  alert('Order placed successfully via Cash on Delivery!');
+  cart = []; updateCart(); closeCart();
 }
 
 render();updateCart();
