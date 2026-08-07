@@ -96,36 +96,75 @@ Pets:["Dog Food","Cat Food","Dog Toy","Cat Toy","Pet Bowl","Pet Leash","Pet Bed"
 Accessories:["Backpack","Wallet","Sunglasses","Wrist Watch","Cap","Belt","Handbag","Travel Pouch"]
 };
 
-// Precise category search terms for accurate images
-const categoryKeywords = {
-  Fashion: "clothing,fashion",
-  Groceries: "grocery,food",
-  Electronics: "gadgets,electronics",
-  Beauty: "cosmetics,skincare",
-  Home: "furniture,decor",
-  Kids: "toys,kids",
-  Pets: "pets,dogs",
-  Accessories: "watch,sunglasses"
+// Reliable Direct CDN Images
+const sampleImages = {
+  "Fashion": [
+    "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/d/d2/Jeans_for_men.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/e/e8/Polo_shirt.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/72/Leather_jacket.jpg"
+  ],
+  "Groceries": [
+    "https://upload.wikimedia.org/wikipedia/commons/e/e4/A_bottle_of_olive_oil.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/6/69/Banana.jpeg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg"
+  ],
+  "Electronics": [
+    "https://upload.wikimedia.org/wikipedia/commons/3/3e/Android_wear_smartwatch.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/18/Wireless_headphones.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/a/a6/Computer_keyboard_and_mouse.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/22/3D_Speaker.png"
+  ],
+  "Beauty": [
+    "https://upload.wikimedia.org/wikipedia/commons/a/a2/Cosmetics_and_beauty_products.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/6/61/Perfume_bottle.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/d/db/Shampoo_bottle.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/d/d4/Lipstick_red.jpg"
+  ],
+  "Home": [
+    "https://upload.wikimedia.org/wikipedia/commons/a/a2/Modern_interior_design_living_room.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/6/6f/Wall_clock.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/29/Stainless_steel_water_bottle.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/1e/Pillow.jpg"
+  ],
+  "Kids": [
+    "https://upload.wikimedia.org/wikipedia/commons/a/a6/Teddy_bear.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/d/dc/School_backpack.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/7b/Toy_car.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/3/30/Baby_shoes.jpg"
+  ],
+  "Pets": [
+    "https://upload.wikimedia.org/wikipedia/commons/d/d9/Collared_dog.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/15/Cat_eating_food.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/10/Dog_leash.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat_toy.jpg"
+  ],
+  "Accessories": [
+    "https://upload.wikimedia.org/wikipedia/commons/8/8f/Leather_wallet.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/a/a4/Aviator_sunglasses.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/b3/Wristwatch.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/25/Leather_belt.jpg"
+  ]
 };
 
 const products=Array.from({length:80000},(_,i)=>{
   const id=i+1, cat=cats[i%cats.length], base=names[cat][i%8];
   const price=299+((i*137)%8500), off=10+((i*7)%51), old=Math.round(price/(1-off/100));
-  return {id,cat,baseName:base,name:`${base} — Edition ${Math.floor(i/8)+1}`,price,old,off,rating:(4+(i%10)/10).toFixed(1),reviews:100+(i*73)%9800};
+  return {id,cat,name:`${base} — Edition ${Math.floor(i/8)+1}`,price,old,off,rating:(4+(i%10)/10).toFixed(1),reviews:100+(i*73)%9800};
 });
 
 const pageSize=24; let page=1, filtered=products, cart=[];
 
-// Category wise reliable Unsplash HD images
 const img=(p,v)=>{
-  const keyword = categoryKeywords[p.cat] || "product";
-  return `https://source.unsplash.com/600x600/?${encodeURIComponent(keyword)}&sig=${p.id*10+v}`;
+  const catArray = sampleImages[p.cat] || sampleImages["Fashion"];
+  return catArray[(p.id + v) % catArray.length];
 };
 
 function render(){
  const start=(page-1)*pageSize, list=filtered.slice(start,start+pageSize);
  document.getElementById('grid').innerHTML=list.map(p=>`<article class="card">
- <div class="pic"><img loading="lazy" src="${img(p,0)}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600'"></div>
+ <div class="pic"><img loading="lazy" src="${img(p,0)}" alt="${p.name}"></div>
  <div class="info"><div class="name">${p.name}</div><div class="rating">★ ${p.rating} · ${p.reviews.toLocaleString()} reviews</div>
  <div class="price">₹${p.price.toLocaleString()} <span class="old">₹${p.old.toLocaleString()}</span><span class="off">${p.off}% off</span></div>
  <div class="actions"><button class="add" onclick="add(${p.id})">ADD TO CART</button><button class="view" onclick="openProduct(${p.id})">VIEW</button></div></div></article>`).join('');
