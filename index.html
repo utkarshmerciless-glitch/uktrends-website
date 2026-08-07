@@ -270,9 +270,6 @@
         <p>Location: Near Ambedkar University, Shaheed Path, Lucknow – 226025</p>
     </footer>
 
-    <!-- Firebase SDK Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
         // 1. FIREBASE CONFIGURATION
@@ -327,46 +324,6 @@
             }
             updateCartUI();
             alert(name + " added to cart!");
-        };
-
-        window.updateCartUI = function() {
-            const cartItemsDiv = document.getElementById('cart-items');
-            const cartCount = document.getElementById('cart-count');
-            const cartTotal = document.getElementById('cart-total');
-            const orderDetailsHidden = document.getElementById('order-details-hidden');
-
-            cartItemsDiv.innerHTML = "";
-            let total = 0;
-            let totalItems = 0;
-            let orderText = "";
-
-            if (window.cart.length === 0) {
-                cartItemsDiv.innerHTML = "<p style='text-align:center; color:#888;'>Cart is empty!</p>";
-            } else {
-                window.cart.forEach((item, index) => {
-                    total += item.price * item.qty;
-                    totalItems += item.qty;
-                    orderText += `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty} | `;
-
-                    cartItemsDiv.innerHTML += `
-                        <div class="cart-item">
-                            <div>
-                                <strong>${item.name}</strong><br>
-                                ₹${item.price} x ${item.qty} = ₹${item.price * item.qty}
-                            </div>
-                            <div>
-                                <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                                <span style="margin:0 8px; font-weight:bold;">${item.qty}</span>
-                                <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            if (cartCount) cartCount.innerText = totalItems;
-            if (cartTotal) cartTotal.innerText = total;
-            if (orderDetailsHidden) orderDetailsHidden.value = orderText + ` Total: ₹${total}`;
         };
 
         window.changeQty = function(index, amount) {
