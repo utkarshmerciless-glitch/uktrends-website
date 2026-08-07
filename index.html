@@ -1,117 +1,141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK TRENDS - Ultimate Superstore</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background-color: #121212; color: #ffffff; padding-bottom: 80px; }
-        header { background-color: #1a1a1a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff6600; position: sticky; top: 0; z-index: 999; }
-        h1 { font-size: 20px; color: #ff6600; }
-        .cart-btn { background-color: #ff6600; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .category { padding: 15px; }
-        .cat-title { color: #ff6600; border-left: 4px solid #ff6600; padding-left: 10px; margin-bottom: 10px; font-size: 18px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background-color: #1e1e1e; border: 1px solid #333; padding: 10px; border-radius: 8px; text-align: center; }
-        .price { font-weight: bold; color: #fff; margin: 5px 0; }
-        .add-btn { background: #ff6600; color: white; border: none; padding: 6px; width: 100%; border-radius: 4px; cursor: pointer; }
-        
-        #login-modal, #cart-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        #cart-modal { height: 80vh; bottom: 0; top: auto; flex-direction: column; padding: 20px; display: none; border-radius: 20px 20px 0 0; }
-        .login-box { background: #1e1e1e; padding: 25px; border-radius: 10px; width: 90%; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 5px; }
-        footer { text-align: center; padding: 30px; color: #888; font-size: 12px; border-top: 1px solid #222; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UK TRENDS — 100,000 Product Mega Store</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif}
+body{background:#f5f6f8;color:#17181b;padding-bottom:50px}
+:root{--o:#ff6a00;--g:#079653}
+.top{background:#111;color:#fff;text-align:center;padding:7px;font-size:12px}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ddd;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.logo{font-size:21px;font-weight:900;color:var(--o)}
+.search{flex:1;min-width:190px}.search input{width:100%;padding:11px;border:1px solid #ddd;border-radius:9px}
+.cart,.add,.more{border:0;border-radius:8px;background:var(--o);color:#fff;font-weight:bold;padding:10px 14px}
+.chips{display:flex;gap:8px;overflow:auto;background:#fff;padding:10px 14px;border-bottom:1px solid #ddd}
+.chip{white-space:nowrap;border:1px solid #ddd;background:#fff;padding:8px 12px;border-radius:20px;font-size:12px}.chip.active{background:#111;color:#fff}
+.hero{margin:14px;padding:22px;border-radius:16px;background:#17191e;color:#fff}.hero h1{margin:10px 0 6px}.hero p{color:#ccc;font-size:13px}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:0 14px 12px;color:#666;font-size:13px}
+.bar select{padding:7px;border:1px solid #ddd;border-radius:7px;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;padding:0 14px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,1fr)}}@media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:#fff;border:1px solid #e2e3e7;border-radius:12px;overflow:hidden}.pic{height:185px;position:relative;background:#eee}.pic img{width:100%;height:100%;object-fit:cover}.badge{position:absolute;left:7px;top:7px;background:var(--g);color:#fff;padding:4px;border-radius:4px;font-size:10px;font-weight:bold}.heart{position:absolute;right:7px;top:7px;border:0;border-radius:50%;background:#fff;width:31px;height:31px;font-size:18px}
+.info{padding:10px}.name{font-weight:bold;font-size:13px;line-height:1.3;min-height:34px}.meta{font-size:11px;color:#777;margin:7px 0}.meta b{background:var(--g);color:#fff;padding:3px;border-radius:4px}.price{font-weight:900;font-size:16px}.mrp{text-decoration:line-through;color:#999;font-size:11px;margin-left:5px}.off{color:var(--g);font-size:11px;margin-left:4px}.add{width:100%;margin-top:8px}
+.more{display:block;margin:20px auto;background:#111}.empty{text-align:center;grid-column:1/-1;padding:50px;color:#777}
+.overlay,.modal{position:fixed;inset:0;background:#0009;z-index:50;display:none}.overlay.show,.modal.show{display:flex}.drawer{margin-left:auto;background:#fff;width:min(440px,94%);height:100%;padding:17px;display:flex;flex-direction:column}.head{display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid #ddd}.close{border:0;border-radius:50%;width:30px;height:30px}.list{overflow:auto;flex:1}.row{display:flex;gap:9px;padding:10px 0;border-bottom:1px solid #eee}.row img{width:58px;height:58px;object-fit:cover;border-radius:6px}.row button{padding:3px 7px}
+.modal{align-items:center;justify-content:center;padding:15px}.box{background:#fff;border-radius:15px;padding:17px;width:min(760px,100%);max-height:94vh;overflow:auto}.gallery{display:grid;grid-template-columns:70px 1fr;gap:8px}.thumbs{display:flex;flex-direction:column;gap:6px}.thumbs img{width:70px;height:62px;object-fit:cover;border-radius:6px}.thumbs img.active{outline:3px solid var(--o)}.main{width:100%;height:390px;object-fit:cover;border-radius:9px}.specs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}.spec{background:#f4f5f7;padding:8px;border-radius:6px;font-size:12px}.actions{display:flex;gap:8px}.actions button{flex:1;padding:11px;border:0;border-radius:8px;font-weight:bold}.primary{background:var(--o);color:#fff}.secondary{background:#eee}
+footer{background:#111;color:#aaa;text-align:center;padding:25px;font-size:12px;margin-top:30px}
+</style>
 </head>
 <body>
+<div class="top">🚚 UK TRENDS • 100,000 PRODUCT CATALOGUE • COD READY</div>
+<header>
+<div class="logo">UK TRENDS</div>
+<div class="search"><input id="q" placeholder="Search products..." oninput="render()"></div>
+<button class="cart" onclick="openCart()">🛒 Cart (<span id="cc">0</span>)</button>
+</header>
+<div id="chips" class="chips"></div>
+<section class="hero"><h1>UK TRENDS Mega Store</h1><p>100,000 generated catalogue records • 6 visual views per product • search • filters • cart • wishlist.</p></section>
+<div class="bar"><span id="status"></span><select id="sort" onchange="render()"><option value="featured">Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="rating">Top Rated</option></select></div>
+<main id="grid" class="grid"></main>
+<button id="more" class="more" onclick="more()">LOAD MORE</button>
 
-    <div id="login-modal">
-        <div class="login-box">
-            <h2>Welcome to UK TRENDS</h2>
-            <input type="text" id="phone-input" placeholder="Enter Mobile Number">
-            <button id="send-otp-btn">Get Demo OTP</button>
-            <div id="otp-step" style="display:none; margin-top:15px;">
-                <input type="text" id="otp-input" placeholder="Enter OTP">
-                <button id="verify-otp-btn">Verify Login</button>
-            </div>
-        </div>
-    </div>
+<div id="cartOverlay" class="overlay" onclick="if(event.target===this)closeCart()"><div class="drawer">
+<div class="head"><h2>Your Cart</h2><button class="close" onclick="closeCart()">✕</button></div>
+<div id="list" class="list"></div><hr>
+<p style="padding-top:10px;font-weight:bold">Total: ₹<span id="total">0</span></p>
+<button class="add" style="margin-top:10px;background:#079653" onclick="checkout()">COD Checkout</button>
+</div></div>
 
-    <header>
-        <h1>UK TRENDS Superstore</h1>
-        <button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
-    </header>
+<div id="productModal" class="modal"><div class="box"><button class="close" style="float:right" onclick="closeProduct()">✕</button><div id="detail"></div></div></div>
 
-    <!-- Fashion -->
-    <div class="category"><h2 class="cat-title">Fashion & Wear</h2>
-    <div class="grid">
-        <div class="card"><p>Men's Cotton Shirt</p><div class="price">₹599</div><button class="add-btn" onclick="addToCart('Men Shirt', 599)">Add</button></div>
-        <div class="card"><p>Women's Kurtis</p><div class="price">₹699</div><button class="add-btn" onclick="addToCart('Kurti', 699)">Add</button></div>
-        <div class="card"><p>Kids T-Shirt</p><div class="price">₹299</div><button class="add-btn" onclick="addToCart('Kids Shirt', 299)">Add</button></div>
-    </div></div>
+<footer><b style="color:#ff6a00">UK TRENDS</b><br><br>Owner: Utkarsh Kumar • Lucknow Mega Store</footer>
 
-    <!-- Home & Kitchen -->
-    <div class="category"><h2 class="cat-title">Home & Kitchen</h2>
-    <div class="grid">
-        <div class="card"><p>Pressure Cooker</p><div class="price">₹1800</div><button class="add-btn" onclick="addToCart('Cooker', 1800)">Add</button></div>
-        <div class="card"><p>Cleaning Jhaadu</p><div class="price">₹99</div><button class="add-btn" onclick="addToCart('Jhaadu', 99)">Add</button></div>
-        <div class="card"><p>Dinner Set</p><div class="price">₹1200</div><button class="add-btn" onclick="addToCart('Dinner Set', 1200)">Add</button></div>
-    </div></div>
+<script>
+/* ---------- 100,000 UNIQUE CATALOGUE RECORDS ---------- */
+const TOTAL=100000;
+const TYPES=[
+["fashion","Fashion","Men's T-Shirt","Cotton T-Shirt"],["fashion","Fashion","Women's Kurti","Printed Kurti"],
+["fashion","Fashion","Men's Shirt","Casual Shirt"],["fashion","Fashion","Women's Jeans","Denim Jeans"],
+["fashion","Fashion","Kids Hoodie","Hoodie Set"],["footwear","Footwear","Men's Shoes","Running Shoes"],
+["footwear","Footwear","Women's Sneakers","Casual Sneakers"],["footwear","Footwear","Socks","Cotton Socks Pack"],
+["footwear","Footwear","Men's Loafers","Casual Loafers"],["electronics","Electronics","Wireless Earbuds","Bluetooth Earbuds"],
+["electronics","Electronics","Power Bank","10000mAh Power Bank"],["electronics","Electronics","Type-C Cable","Fast Charging Cable"],
+["electronics","Electronics","Smart Watch","Fitness Smart Watch"],["electronics","Electronics","Speaker","Portable Speaker"],
+["electronics","Electronics","Desk Lamp","USB LED Lamp"],["grocery","Grocery","Basmati Rice","Premium Rice"],
+["grocery","Grocery","Atta","Whole Wheat Flour"],["grocery","Grocery","Cooking Oil","Sunflower Oil"],
+["grocery","Grocery","Tea","Black Tea"],["grocery","Grocery","Biscuits","Chocolate Biscuits"],
+["beauty","Beauty","Face Wash","Daily Face Wash"],["beauty","Beauty","Face Cream","Vitamin C Face Cream"],
+["beauty","Beauty","Body Lotion","Aloe Vera Lotion"],["beauty","Beauty","Shampoo","Hair Care Shampoo"],
+["home","Home & Kitchen","Cleaning Cloth","Microfiber Cloth"],["home","Home & Kitchen","Broom","Soft Floor Broom"],
+["home","Home & Kitchen","Storage Box","Organizer Box"],["home","Home & Kitchen","Bedsheet","Cotton Bedsheet"],
+["kids","Kids & Baby","Building Blocks","Kids Building Blocks"],["kids","Kids & Baby","Baby Romper","Cotton Baby Romper"],
+["pets","Pet Care","Dog Food","Adult Dog Food"],["pets","Pet Care","Dog Toy","Rubber Chew Ball"],
+["pets","Pet Care","Cat Brush","Grooming Brush"],["accessories","Accessories","Wrist Watch","Analog Watch"],
+["accessories","Accessories","Backpack","Laptop Backpack"],["accessories","Accessories","Sunglasses","UV Sunglasses"]
+];
+const COLORS=["Black","White","Blue","Navy","Grey","Red","Green","Pink","Brown","Beige","Purple","Yellow","Multicolor"];
+const SIZES=["XS","S","M","L","XL","XXL","Standard","Pack of 2","Pack of 3","Pack of 5"];
+const BRANDS=["UK Select","UK Trends","UK Active","UK Home","UK Care","UK Kids","UK Pantry","UK Pet","UK Classic","UK Style"];
+const VIEWS=["FRONT","BACK","ANGLE","DETAIL","LIFESTYLE","PACKAGING"];
+let cat="all",limit=48,wish=[],cart=JSON.parse(localStorage.uktCart||"[]"),view=0,current=null;
 
-    <!-- Pet Care -->
-    <div class="category"><h2 class="cat-title">Pet & Animal Care</h2>
-    <div class="grid">
-        <div class="card"><p>Dog Food (Pedigree)</p><div class="price">₹450</div><button class="add-btn" onclick="addToCart('Dog Food', 450)">Add</button></div>
-        <div class="card"><p>Cat Food (Whiskas)</p><div class="price">₹350</div><button class="add-btn" onclick="addToCart('Cat Food', 350)">Add</button></div>
-        <div class="card"><p>Pet Grooming Shampoo</p><div class="price">₹250</div><button class="add-btn" onclick="addToCart('Pet Shampoo', 250)">Add</button></div>
-        <div class="card"><p>Pet Toy/Ball</p><div class="price">₹150</div><button class="add-btn" onclick="addToCart('Pet Toy', 150)">Add</button></div>
-    </div></div>
-
-    <!-- Beauty -->
-    <div class="category"><h2 class="cat-title">Beauty & Skincare</h2>
-    <div class="grid">
-        <div class="card"><p>Face Wash</p><div class="price">₹200</div><button class="add-btn" onclick="addToCart('Face Wash', 200)">Add</button></div>
-        <div class="card"><p>Herbal Soap</p><div class="price">₹80</div><button class="add-btn" onclick="addToCart('Soap', 80)">Add</button></div>
-        <div class="card"><p>Sunscreen</p><div class="price">₹350</div><button class="add-btn" onclick="addToCart('Sunscreen', 350)">Add</button></div>
-    </div></div>
-
-    <div id="cart-modal">
-        <h2>Your Cart</h2>
-        <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin:10px 0;"></div>
-        <h3>Total: ₹<span id="cart-total">0</span></h3>
-        <button onclick="alert('Order Placed!')">Checkout</button>
-        <button onclick="toggleCart()" style="background:#444; margin-top:10px;">Close</button>
-    </div>
-
-    <footer>
-        <p style="color:#ff6600; font-style:italic;">"Utkarsh loves you so much, my dearest Anshu — forever and always."</p>
-        <p>Owner: Utkarsh Kumar | Lucknow Store</p>
-    </footer>
-
-    <script>
-        let cart = [], total = 0;
-        document.getElementById('send-otp-btn').addEventListener('click', () => {
-            const otp = "123456";
-            localStorage.setItem('otp', otp);
-            alert("[DEMO] Aapka OTP hai: " + otp);
-            document.getElementById('otp-step').style.display = 'block';
-        });
-        document.getElementById('verify-otp-btn').addEventListener('click', () => {
-            if(document.getElementById('otp-input').value === localStorage.getItem('otp')) {
-                document.getElementById('login-modal').style.display = 'none';
-            } else { alert("Wrong OTP"); }
-        });
-        function addToCart(name, price) {
-            cart.push({name, price}); total += price;
-            document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('cart-total').innerText = total;
-            document.getElementById('cart-items').innerHTML += `<p>${name} - ₹${price}</p>`;
-            alert(name + " added!");
-        }
-        function toggleCart() {
-            document.getElementById('cart-modal').style.display = (document.getElementById('cart-modal').style.display === 'flex') ? 'none' : 'flex';
-        }
-    </script>
+function h(n){let x=(n+0x6D2B79F5)|0;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}
+function make(id){
+ const t=TYPES[(id-1)%TYPES.length],a=h(id),b=h(id+111),c=h(id+777);
+ const variant=Math.floor((id-1)/TYPES.length)+1;
+ const price=Math.max(49,Math.round((79+a*5900)/10)*10);
+ const mrp=Math.max(price+50,Math.round(price*(1.15+b*1.15)/10)*10);
+ return {id,sku:"UKT-"+String(id).padStart(6,"0"),cat:t[0],catName:t[1],
+ name:`${t[2]} ${t[3]} — Edition ${variant}`,brand:BRANDS[id%BRANDS.length],
+ price,mrp,rating:(3.8+a*1.2).toFixed(1),reviews:Math.floor(20+b*9980),
+ stock:5+Math.floor(c*495),color:COLORS[id%COLORS.length],size:SIZES[id%SIZES.length],
+ type:t[3],images:[0,1,2,3,4,5].map(v=>visual(id,t[0],v))}}
+function visual(id,category,v){
+ const bg={fashion:"#e5c0c0",footwear:"#cfd9e8",electronics:"#cbd5e1",grocery:"#ead8aa",beauty:"#e7c9df",home:"#cce0d4",kids:"#f1d391",pets:"#dac5aa",accessories:"#d2d2e2"}[category]||"#ddd";
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900"><rect width="900" height="900" fill="#fafafa"/><rect x="45" y="45" width="810" height="810" rx="50" fill="${bg}"/><circle cx="450" cy="395" r="190" fill="white" opacity=".75"/><rect x="150" y="275" width="600" height="240" rx="30" fill="white" opacity=".9"/><text x="450" y="375" text-anchor="middle" font-family="Arial" font-size="43" font-weight="bold">${VIEWS[v]}</text><text x="450" y="430" text-anchor="middle" font-family="Arial" font-size="25">UK TRENDS • PRODUCT ${id}</text><text x="450" y="785" text-anchor="middle" font-family="Arial" font-size="25" fill="#ff6a00">CATALOGUE VISUAL</text></svg>`;
+ return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg)
+}
+function discount(p){return Math.round((1-p.price/p.mrp)*100)}
+function categoryButtons(){
+ const seen=new Set(),arr=[["all","All Items"]];
+ TYPES.forEach(t=>{if(!seen.has(t[0])){seen.add(t[0]);arr.push([t[0],t[1]])}});
+ chips.innerHTML=arr.map(x=>`<button class="chip ${cat===x[0]?"active":""}" onclick="setCat('${x[0]}')">${x[1]}</button>`).join("")
+}
+function list(){
+ const q=document.getElementById("q").value.toLowerCase(),out=[];
+ for(let id=1;id<=limit;id++){
+  const p=make(id),text=(p.name+" "+p.catName+" "+p.brand+" "+p.color+" "+p.type).toLowerCase();
+  if((cat==="all"||p.cat===cat)&&(!q||text.includes(q)))out.push(p)
+ }
+ const s=document.getElementById("sort").value;
+ if(s==="low")out.sort((a,b)=>a.price-b.price); if(s==="high")out.sort((a,b)=>b.price-a.price); if(s==="rating")out.sort((a,b)=>b.rating-a.rating);
+ return out
+}
+function render(){
+ const a=list();grid.innerHTML=a.length?a.map(card).join(""):`<div class="empty">No products found.</div>`;
+ status.textContent=`Showing ${a.length} products • Catalogue capacity: ${TOTAL.toLocaleString("en-IN")}`;
+ more.style.display=limit<TOTAL?"block":"none"
+}
+function card(p){return `<article class="card"><div class="pic"><span class="badge">${discount(p)}% OFF</span><button class="heart" onclick="event.stopPropagation();toggleWish(${p.id})">${wish.includes(p.id)?"♥":"♡"}</button><img src="${p.images[0]}" loading="lazy" onclick="openProduct(${p.id})" alt="${p.name}"></div><div class="info"><div class="name">${p.name}</div><div class="meta"><b>★ ${p.rating}</b> • ${p.reviews.toLocaleString()} reviews</div><span class="price">₹${p.price.toLocaleString("en-IN")}</span><span class="mrp">₹${p.mrp.toLocaleString("en-IN")}</span><span class="off">${discount(p)}% off</span><button class="add" onclick="add(${p.id})">ADD TO CART</button></div></article>`}
+function setCat(x){cat=x;limit=48;categoryButtons();render()}
+function more(){limit=Math.min(TOTAL,limit+48);render()}
+function add(id){let x=cart.find(x=>x.id===id);x?x.qty++:cart.push({id,qty:1});save();updateCount();alert("Added to cart")}
+function toggleWish(id){wish=wish.includes(id)?wish.filter(x=>x!==id):[...wish,id];render()}
+function save(){localStorage.uktCart=JSON.stringify(cart)}
+function updateCount(){cc.textContent=cart.reduce((a,x)=>a+x.qty,0)}
+function openCart(){renderCart();cartOverlay.classList.add("show")}
+function closeCart(){cartOverlay.classList.remove("show")}
+function renderCart(){let total=0;list.innerHTML=cart.length?cart.map(x=>{let p=make(x.id);total+=p.price*x.qty;return `<div class="row"><img src="${p.images[0]}"><div style="flex:1"><b>${p.name}</b><div>₹${p.price}</div><button onclick="change(${p.id},-1)">−</button> ${x.qty} <button onclick="change(${p.id},1)">+</button> <button onclick="removeItem(${p.id})">Remove</button></div></div>`}).join(""):`<div class="empty">Cart is empty.</div>`;document.getElementById("total").textContent=total.toLocaleString("en-IN")}
+function change(id,d){let x=cart.find(x=>x.id===id);if(!x)return;x.qty+=d;if(x.qty<1)cart=cart.filter(x=>x.id!==id);save();updateCount();renderCart()}
+function removeItem(id){cart=cart.filter(x=>x.id!==id);save();updateCount();renderCart()}
+function checkout(){alert(cart.length?"COD checkout demo — connect a real backend before taking live orders.":"Cart is empty")}
+function openProduct(id){current=make(id);view=0;showDetail();productModal.classList.add("show")}
+function closeProduct(){productModal.classList.remove("show")}
+function setView(v){view=v;showDetail()}
+function showDetail(){let p=current;detail.innerHTML=`<div class="gallery"><div class="thumbs">${p.images.map((im,i)=>`<img src="${im}" class="${i===view?"active":""}" onclick="setView(${i})">`).join("")}</div><img class="main" src="${p.images[view]}"></div><h2 style="margin-top:12px">${p.name}</h2><p style="margin:8px 0"><b>★ ${p.rating}</b> • ${p.reviews.toLocaleString()} reviews</p><div><span class="price">₹${p.price}</span> <span class="mrp">₹${p.mrp}</span> <span class="off">${discount(p)}% off</span></div><p style="margin:10px 0;color:#666">SKU: ${p.sku}<br>Brand: ${p.brand}<br>Colour: ${p.color}<br>Size/Pack: ${p.size}<br>Stock: ${p.stock}<br>Cash on Delivery: Available</p><div class="specs"><div class="spec">Front view</div><div class="spec">Back view</div><div class="spec">Angle view</div><div class="spec">Detail view</div><div class="spec">Lifestyle view</div><div class="spec">Packaging view</div></div><div class="actions"><button class="secondary" onclick="toggleWish(${p.id})">♡ Wishlist</button><button class="primary" onclick="add(${p.id});closeProduct()">ADD TO CART</button></div>`}
+categoryButtons();render();updateCount();
+</script>
 </body>
 </html>
