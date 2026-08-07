@@ -1,22 +1,25 @@
 {
-  "name": "UK TRENDS",
-  "short_name": "UK Trends",
+  "name": "UK TRENDS - Online Store",
+  "short_name": "UK TRENDS",
+  "description": "Official UK TRENDS Shopping App",
   "start_url": "/uktrends-website/",
+  "scope": "/uktrends-website/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#f36f00",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg",
+      "src": "https://cdn-icons-png.flaticon.com/512/3081/3081559.png",
       "sizes": "192x192",
-      "type": "image/jpg"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg",
+      "src": "https://cdn-icons-png.flaticon.com/512/3081/3081559.png",
       "sizes": "512x512",
-      "type": "image/jpg"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
-
