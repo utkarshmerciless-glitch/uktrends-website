@@ -3,197 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK TRENDS - Official Online Store</title>
+    <title>UK TRENDS</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
-        header { background: #0B1F3A; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 24px; }
-        .cart-btn { background: #ff6b00; color: white; border: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        
-        /* Login Modal Styles */
-        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .login-box { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center; }
-        .login-box h2 { margin-top: 0; color: #0B1F3A; }
-        .login-box input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
-        .login-box button { background: #0B1F3A; color: white; border: none; padding: 12px 20px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        #recaptcha-container { margin: 15px 0; display: flex; justify-content: center; }
-
-        /* Products Styles */
-        .categories { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-        .cat-btn { padding: 10px 20px; border: 1px solid #0B1F3A; background: white; cursor: pointer; border-radius: 20px; }
-        .cat-btn.active { background: #0B1F3A; color: white; }
-        
-        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; max-width: 1000px; margin: auto; }
-        .product-card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .product-card button { background: #ff6b00; color: white; border: none; padding: 8px 15px; width: 100%; border-radius: 5px; margin-top: 10px; cursor: pointer; font-weight: bold; }
-
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding-bottom: 60px;
+        }
+        header {
+            background-color: #1a1a1a;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        h1 {
+            font-size: 22px;
+            color: #ffffff;
+        }
+        .cart-btn {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .container {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .product-card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .product-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .product-card p {
+            color: #b0b0b0;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .price {
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .add-btn {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+        /* Login Modal */
+        #login-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .login-box {
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
         /* Cart Modal */
-        #cart-modal { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100vh; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 1000; flex-direction: column; }
-        .cart-header { display: flex; justify-content: space-between; padding: 15px; background: #0B1F3A; color: white; }
-        .close-cart { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-        .cart-items { padding: 15px; flex-grow: 1; overflow-y: auto; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .qty-btn { background: #eee; border: 1px solid #ccc; padding: 5px 10px; cursor: pointer; font-weight: bold; }
-        .cart-footer { padding: 15px; background: #f9f9f9; border-top: 1px solid #eee; }
-        .checkout-btn { background: #28a745; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        
-        /* Checkout Form */
-        #checkout-form-div { display: none; padding: 15px; }
-        .checkout-input { width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        
-        footer { text-align: center; padding: 20px; background: #0B1F3A; color: white; margin-top: 40px; }
+        #cart-modal {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%; height: 75vh;
+            background: #1a1a1a;
+            border-top: 2px solid #ff6600;
+            display: none;
+            flex-direction: column;
+            z-index: 500;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #252525;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+        .qty-btn {
+            background: #ff6600;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .cart-footer {
+            border-top: 1px solid #333;
+            padding-top: 15px;
+            text-align: center;
+        }
+        .checkout-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 12px;
+            border-top: 1px solid #222;
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Firebase Phone Auth Login Modal -->
+    <!-- Login Modal -->
     <div id="login-modal">
         <div class="login-box">
             <h2>Login to UK TRENDS</h2>
-            <p>Please verify your number to continue shopping.</p>
-            
             <div id="phone-step">
-                <input type="tel" id="phone-input" placeholder="+91 1234567890" value="+91">
-                <div id="recaptcha-container"></div>
+                <input type="text" id="phone-input" placeholder="Enter Phone (+91...)">
                 <button id="send-otp-btn">Send OTP</button>
             </div>
-
             <div id="otp-step" style="display:none;">
                 <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
-                <button id="verify-otp-btn">Verify & Login</button>
+                <button id="verify-otp-btn">Verify OTP</button>
             </div>
+            <div id="recaptcha-container" style="margin-top: 10px;"></div>
         </div>
     </div>
 
+    <!-- Main Header -->
     <header>
         <h1>UK TRENDS</h1>
         <button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
     </header>
 
-    <div class="categories">
-        <button class="cat-btn active">All</button>
-        <button class="cat-btn">Fashion</button>
-        <button class="cat-btn">Grocery</button>
-        <button class="cat-btn">Baby Care</button>
-    </div>
-
-    <!-- Products Section -->
-    <div class="products">
+    <!-- Products Grid -->
+    <div class="container">
         <div class="product-card">
             <h3>Polo Neck T-Shirt</h3>
             <p>Fashion</p>
-            <h4>₹450</h4>
-            <button onclick="addToCart(1, 'Polo Neck T-Shirt', 450)">Add to Cart</button>
+            <div class="price">₹450</div>
+            <button class="add-btn" onclick="addToCart('1', 'Polo Neck T-Shirt', 450)">Add to Cart</button>
         </div>
         <div class="product-card">
-            <h3>Fresh Apples (1kg)</h3>
+            <h3>Fresh Apples</h3>
             <p>Grocery</p>
-            <h4>₹150</h4>
-            <button onclick="addToCart(2, 'Fresh Apples', 150)">Add to Cart</button>
+            <div class="price">₹150</div>
+            <button class="add-btn" onclick="addToCart('2', 'Fresh Apples', 150)">Add to Cart</button>
         </div>
         <div class="product-card">
             <h3>Baby Lotion</h3>
             <p>Baby Care</p>
-            <h4>₹220</h4>
-            <button onclick="addToCart(3, 'Baby Lotion', 220)">Add to Cart</button>
+            <div class="price">₹220</div>
+            <button class="add-btn" onclick="addToCart('3', 'Baby Lotion', 220)">Add to Cart</button>
         </div>
     </div>
 
-    <!-- Cart Modal -->
+    <!-- Cart Modal Overlay -->
     <div id="cart-modal">
         <div class="cart-header">
             <h2>Your Cart</h2>
-            <button class="close-cart" onclick="toggleCart()">X</button>
+            <button class="close-cart" onclick="toggleCart()">✕</button>
         </div>
-        
-        <!-- Cart Items List -->
         <div id="cart-items" class="cart-items">
-            <p style="text-align:center;">Cart is empty!</p>
+            <p style="text-align:center; color:#888;">Cart is empty!</p>
         </div>
-        
-        <!-- Cart Footer -->
         <div class="cart-footer">
             <h3>Total: ₹<span id="cart-total">0</span></h3>
             <button class="checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout</button>
-            
-            <!-- Formspree Checkout Form -->
-            <div id="checkout-form-div">
-                <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
-                    <input type="text" name="Name" class="checkout-input" placeholder="Full Name" required>
-                    <input type="text" name="Address" class="checkout-input" placeholder="Delivery Address" required>
-                    <select name="Payment_Method" class="checkout-input">
-                        <option value="Cash on Delivery">Cash on Delivery</option>
-                        <option value="UPI">UPI Payment</option>
-                    </select>
-                    <input type="hidden" name="Order_Details" id="order-details-hidden">
-                    <input type="hidden" name="Customer_Phone" id="customer-phone-hidden">
-                    <button type="submit" class="checkout-btn" style="background:#0B1F3A;">Place Order</button>
-                </form>
-            </div>
         </div>
     </div>
 
+    <!-- Checkout Form Div (Hidden initially) -->
+    <div id="checkout-form-div" style="display:none; padding:20px; background:#1e1e1e; margin:20px; border-radius:8px;">
+        <h3>Checkout Details</h3>
+        <form action="https://api.web3forms.com/submit" method="POST" style="margin-top:10px;">
+            <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
+            <input type="hidden" name="subject" value="New Order from UK TRENDS">
+            <input type="hidden" id="order-details-hidden" name="order_details" value="">
+            
+            <input type="text" name="name" placeholder="Your Full Name" required style="width:100%; padding:10px; margin-bottom:10px; background:#2a2a2a; border:1px solid #444; color:white; border-radius:5px;">
+            <input type="text" name="address" placeholder="Delivery Address" required style="width:100%; padding:10px; margin-bottom:10px; background:#2a2a2a; border:1px solid #444; color:white; border-radius:5px;">
+            <button type="submit" style="width:100%; padding:10px; background:#ff6600; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Confirm Order</button>
+        </form>
+    </div>
+
+    <!-- Footer Information -->
     <footer>
-        <h3>UK TRENDS</h3>
         <p>Owner: Utkarsh Kumar</p>
-        <p>Location: Near Ambedkar University, Shaheed Path, Lucknow - 226025</p>
-        <p>WhatsApp: +91 7052561304</p>
+        <p>Location: Near Ambedkar University, Shaheed Path, Lucknow – 226025</p>
     </footer>
 
-    <!-- FIREBASE AND WEBSITE LOGIC -->
-    <script type="module">
-        // 1. Firebase Setup (Aapki Chaabi/Config)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
+    <script>
+        // 1. FIREBASE CONFIGURATION
         const firebaseConfig = {
-            apiKey: "AIzaSyBhSudxAHMMnaB1fOVEqJy1QuZmB3Fbq0E",
-            authDomain: "uk-trends-28eab.firebaseapp.com",
-            projectId: "uk-trends-28eab",
-            storageBucket: "uk-trends-28eab.firebasestorage.app",
-            messagingSenderId: "925607756574",
-            appId: "1:925607756574:web:f70b1eaa9ef7e07088bf0f",
-            measurementId: "G-044WGVK33F"
+            apiKey: "YAHAN_APNI_FIREBASE_API_KEY_DAALEIN",
+            authDomain: "utkarshmerciless-glitch.firebaseapp.com",
+            projectId: "utkarshmerciless-glitch",
+            storageBucket: "utkarshmerciless-glitch.appspot.com",
+            messagingSenderId: "YAHAN_SENDER_ID",
+            appId: "YAHAN_APP_ID"
         };
+        firebase.initializeApp(firebaseConfig);
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Check if user is already logged in
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('login-modal').style.display = 'none';
-                document.getElementById('customer-phone-hidden').value = user.phoneNumber;
-            } else {
-                document.getElementById('login-modal').style.display = 'flex';
-                setupRecaptcha();
-            }
+        // Setup reCAPTCHA and Phone Auth
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'normal'
         });
 
-        // Setup Recaptcha
-        function setupRecaptcha() {
-            if(!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                    'size': 'normal'
-                });
-                window.recaptchaVerifier.render();
-            }
-        }
-
-        // Send OTP Button
         document.getElementById('send-otp-btn').addEventListener('click', () => {
             const phoneNumber = document.getElementById('phone-input').value;
-            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+            firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
                     document.getElementById('phone-step').style.display = 'none';
                     document.getElementById('otp-step').style.display = 'block';
                 }).catch((error) => {
-                  alert(error.message);
+                    alert(error.message);
                 });
         });
 
-        // Verify OTP Button
         document.getElementById('verify-otp-btn').addEventListener('click', () => {
             const code = document.getElementById('otp-input').value;
             window.confirmationResult.confirm(code).then((result) => {
@@ -204,7 +312,7 @@
             });
         });
 
-        // 2. CART LOGIC (Website ka Cart System)
+        // 2. CART LOGIC
         window.cart = [];
 
         window.addToCart = function(id, name, price) {
@@ -218,45 +326,6 @@
             alert(name + " added to cart!");
         };
 
-    window.updateCartUI = function() {
-    const cartItemsDiv = document.getElementById('cart-items');
-    const cartCount = document.getElementById('cart-count');
-    const cartTotal = document.getElementById('cart-total');
-    const orderDetailsHidden = document.getElementById('order-details-hidden');
-
-    cartItemsDiv.innerHTML = "";
-    let total = 0;
-    let totalItems = 0;
-    let orderText = "";
-
-    if (window.cart.length === 0) {
-        cartItemsDiv.innerHTML = "<p style='text-align:center;'>Cart is empty!</p>";
-    } else {
-        window.cart.forEach((item, index) => {
-            total += item.price * item.qty;
-            totalItems += item.qty;
-            orderText += `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty} | `;
-
-            cartItemsDiv.innerHTML += `
-                <div class="cart-item">
-                    <div>
-                        <strong>${item.name}</strong><br>
-                        ₹${item.price} x ${item.qty} = ₹${item.price * item.qty}
-                    </div>
-                    <div>
-                        <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                        <span>${item.qty}</span>
-                        <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    if (cartCount) cartCount.innerText = totalItems;
-    if (cartTotal) cartTotal.innerText = total;
-    if (orderDetailsHidden) orderDetailsHidden.value = orderText + ` Total: ₹${total}`;
-};
         window.updateCartUI = function() {
             const cartItemsDiv = document.getElementById('cart-items');
             const cartCount = document.getElementById('cart-count');
@@ -269,13 +338,13 @@
             let orderText = "";
 
             if (window.cart.length === 0) {
-                cartItemsDiv.innerHTML = "<p style='text-align:center;'>Cart is empty!</p>";
+                cartItemsDiv.innerHTML = "<p style='text-align:center; color:#888;'>Cart is empty!</p>";
             } else {
                 window.cart.forEach((item, index) => {
                     total += item.price * item.qty;
                     totalItems += item.qty;
                     orderText += `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty} | `;
-                    
+
                     cartItemsDiv.innerHTML += `
                         <div class="cart-item">
                             <div>
@@ -284,7 +353,7 @@
                             </div>
                             <div>
                                 <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                                <span>${item.qty}</span>
+                                <span style="margin:0 8px; font-weight:bold;">${item.qty}</span>
                                 <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
                             </div>
                         </div>
@@ -292,9 +361,9 @@
                 });
             }
 
-            cartCount.innerText = totalItems;
-            cartTotal.innerText = total;
-            orderDetailsHidden.value = orderText + ` Total: ₹${total}`;
+            if (cartCount) cartCount.innerText = totalItems;
+            if (cartTotal) cartTotal.innerText = total;
+            if (orderDetailsHidden) orderDetailsHidden.value = orderText + ` Total: ₹${total}`;
         };
 
         window.changeQty = function(index, amount) {
@@ -316,6 +385,7 @@
                 return;
             }
             document.getElementById('checkout-form-div').style.display = 'block';
+            toggleCart();
         };
     </script>
 </body>
