@@ -3,348 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK TRENDS</title>
+    <title>UK TRENDS - Ultimate Superstore</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            padding-bottom: 60px;
-        }
-        header {
-            background-color: #1a1a1a;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-        }
-        h1 {
-            font-size: 22px;
-            color: #ffffff;
-        }
-        .cart-btn {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .container {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .product-card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-        .product-card h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        .product-card p {
-            color: #b0b0b0;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .price {
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        .add-btn {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-        }
-        /* Login Modal */
-        #login-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .login-box {
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 5px;
-        }
-        .login-box button {
-            width: 100%;
-            padding: 10px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        /* Cart Modal */
-        #cart-modal {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%; height: 75vh;
-            background: #1a1a1a;
-            border-top: 2px solid #ff6600;
-            display: none;
-            flex-direction: column;
-            z-index: 500;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
-        }
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-        .close-cart {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .cart-items {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin: 15px 0;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #252525;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-        }
-        .qty-btn {
-            background: #ff6600;
-            color: white;
-            border: none;
-            padding: 2px 8px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .cart-footer {
-            border-top: 1px solid #333;
-            padding-top: 15px;
-            text-align: center;
-        }
-        .checkout-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            font-size: 12px;
-            border-top: 1px solid #222;
-            margin-top: 30px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #121212; color: #ffffff; padding-bottom: 80px; }
+        header { background-color: #1a1a1a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff6600; position: sticky; top: 0; z-index: 999; }
+        h1 { font-size: 20px; color: #ff6600; }
+        .cart-btn { background-color: #ff6600; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .category { padding: 15px; }
+        .cat-title { color: #ff6600; border-left: 4px solid #ff6600; padding-left: 10px; margin-bottom: 10px; font-size: 18px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { background-color: #1e1e1e; border: 1px solid #333; padding: 10px; border-radius: 8px; text-align: center; }
+        .price { font-weight: bold; color: #fff; margin: 5px 0; }
+        .add-btn { background: #ff6600; color: white; border: none; padding: 6px; width: 100%; border-radius: 4px; cursor: pointer; }
+        
+        #login-modal, #cart-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        #cart-modal { height: 80vh; bottom: 0; top: auto; flex-direction: column; padding: 20px; display: none; border-radius: 20px 20px 0 0; }
+        .login-box { background: #1e1e1e; padding: 25px; border-radius: 10px; width: 90%; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 5px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 12px; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <!-- Login Modal -->
     <div id="login-modal">
         <div class="login-box">
-            <h2>Login to UK TRENDS</h2>
-            <div id="phone-step">
-                <input type="text" id="phone-input" placeholder="Enter Phone (+91...)">
-                <button id="send-otp-btn">Send OTP</button>
+            <h2>Welcome to UK TRENDS</h2>
+            <input type="text" id="phone-input" placeholder="Enter Mobile Number">
+            <button id="send-otp-btn">Get Demo OTP</button>
+            <div id="otp-step" style="display:none; margin-top:15px;">
+                <input type="text" id="otp-input" placeholder="Enter OTP">
+                <button id="verify-otp-btn">Verify Login</button>
             </div>
-            <div id="otp-step" style="display:none;">
-                <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
-                <button id="verify-otp-btn">Verify OTP</button>
-            </div>
-            <div id="recaptcha-container" style="margin-top: 10px;"></div>
         </div>
     </div>
 
-    <!-- Main Header -->
     <header>
-        <h1>UK TRENDS</h1>
+        <h1>UK TRENDS Superstore</h1>
         <button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
     </header>
 
-    <!-- Products Grid -->
-    <div class="container">
-        <div class="product-card">
-            <h3>Polo Neck T-Shirt</h3>
-            <p>Fashion</p>
-            <div class="price">₹450</div>
-            <button class="add-btn" onclick="addToCart('1', 'Polo Neck T-Shirt', 450)">Add to Cart</button>
-        </div>
-        <div class="product-card">
-            <h3>Fresh Apples</h3>
-            <p>Grocery</p>
-            <div class="price">₹150</div>
-            <button class="add-btn" onclick="addToCart('2', 'Fresh Apples', 150)">Add to Cart</button>
-        </div>
-        <div class="product-card">
-            <h3>Baby Lotion</h3>
-            <p>Baby Care</p>
-            <div class="price">₹220</div>
-            <button class="add-btn" onclick="addToCart('3', 'Baby Lotion', 220)">Add to Cart</button>
-        </div>
-    </div>
+    <!-- Fashion -->
+    <div class="category"><h2 class="cat-title">Fashion & Wear</h2>
+    <div class="grid">
+        <div class="card"><p>Men's Cotton Shirt</p><div class="price">₹599</div><button class="add-btn" onclick="addToCart('Men Shirt', 599)">Add</button></div>
+        <div class="card"><p>Women's Kurtis</p><div class="price">₹699</div><button class="add-btn" onclick="addToCart('Kurti', 699)">Add</button></div>
+        <div class="card"><p>Kids T-Shirt</p><div class="price">₹299</div><button class="add-btn" onclick="addToCart('Kids Shirt', 299)">Add</button></div>
+    </div></div>
 
-    <!-- Cart Modal Overlay -->
+    <!-- Home & Kitchen -->
+    <div class="category"><h2 class="cat-title">Home & Kitchen</h2>
+    <div class="grid">
+        <div class="card"><p>Pressure Cooker</p><div class="price">₹1800</div><button class="add-btn" onclick="addToCart('Cooker', 1800)">Add</button></div>
+        <div class="card"><p>Cleaning Jhaadu</p><div class="price">₹99</div><button class="add-btn" onclick="addToCart('Jhaadu', 99)">Add</button></div>
+        <div class="card"><p>Dinner Set</p><div class="price">₹1200</div><button class="add-btn" onclick="addToCart('Dinner Set', 1200)">Add</button></div>
+    </div></div>
+
+    <!-- Pet Care -->
+    <div class="category"><h2 class="cat-title">Pet & Animal Care</h2>
+    <div class="grid">
+        <div class="card"><p>Dog Food (Pedigree)</p><div class="price">₹450</div><button class="add-btn" onclick="addToCart('Dog Food', 450)">Add</button></div>
+        <div class="card"><p>Cat Food (Whiskas)</p><div class="price">₹350</div><button class="add-btn" onclick="addToCart('Cat Food', 350)">Add</button></div>
+        <div class="card"><p>Pet Grooming Shampoo</p><div class="price">₹250</div><button class="add-btn" onclick="addToCart('Pet Shampoo', 250)">Add</button></div>
+        <div class="card"><p>Pet Toy/Ball</p><div class="price">₹150</div><button class="add-btn" onclick="addToCart('Pet Toy', 150)">Add</button></div>
+    </div></div>
+
+    <!-- Beauty -->
+    <div class="category"><h2 class="cat-title">Beauty & Skincare</h2>
+    <div class="grid">
+        <div class="card"><p>Face Wash</p><div class="price">₹200</div><button class="add-btn" onclick="addToCart('Face Wash', 200)">Add</button></div>
+        <div class="card"><p>Herbal Soap</p><div class="price">₹80</div><button class="add-btn" onclick="addToCart('Soap', 80)">Add</button></div>
+        <div class="card"><p>Sunscreen</p><div class="price">₹350</div><button class="add-btn" onclick="addToCart('Sunscreen', 350)">Add</button></div>
+    </div></div>
+
     <div id="cart-modal">
-        <div class="cart-header">
-            <h2>Your Cart</h2>
-            <button class="close-cart" onclick="toggleCart()">✕</button>
-        </div>
-        <div id="cart-items" class="cart-items">
-            <p style="text-align:center; color:#888;">Cart is empty!</p>
-        </div>
-        <div class="cart-footer">
-            <h3>Total: ₹<span id="cart-total">0</span></h3>
-            <button class="checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout</button>
-        </div>
+        <h2>Your Cart</h2>
+        <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin:10px 0;"></div>
+        <h3>Total: ₹<span id="cart-total">0</span></h3>
+        <button onclick="alert('Order Placed!')">Checkout</button>
+        <button onclick="toggleCart()" style="background:#444; margin-top:10px;">Close</button>
     </div>
 
-    <!-- Checkout Form Div (Hidden initially) -->
-    <div id="checkout-form-div" style="display:none; padding:20px; background:#1e1e1e; margin:20px; border-radius:8px;">
-        <h3>Checkout Details</h3>
-        <form action="https://api.web3forms.com/submit" method="POST" style="margin-top:10px;">
-            <input type="hidden" name="access_key" value="497eefe8-7127-40e3-945e-ada282e07cbd">
-            <input type="hidden" name="subject" value="New Order from UK TRENDS">
-            <input type="hidden" id="order-details-hidden" name="order_details" value="">
-            
-            <input type="text" name="name" placeholder="Your Full Name" required style="width:100%; padding:10px; margin-bottom:10px; background:#2a2a2a; border:1px solid #444; color:white; border-radius:5px;">
-            <input type="text" name="address" placeholder="Delivery Address" required style="width:100%; padding:10px; margin-bottom:10px; background:#2a2a2a; border:1px solid #444; color:white; border-radius:5px;">
-            <button type="submit" style="width:100%; padding:10px; background:#ff6600; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Confirm Order</button>
-        </form>
-    </div>
-
-    <!-- Footer Information -->
     <footer>
-        <p style="font-style: italic; font-size: 14px; color: #ff6600; margin-bottom: 8px;">
-            "Utkarsh loves you so much, my dearest Anshu — forever and always."
-        </p>
-        <p>Owner: Utkarsh Kumar</p>
-        <p>Location: Near Ambedkar University, Shaheed Path, Lucknow – 226025</p>
+        <p style="color:#ff6600; font-style:italic;">"Utkarsh loves you so much, my dearest Anshu — forever and always."</p>
+        <p>Owner: Utkarsh Kumar | Lucknow Store</p>
     </footer>
 
     <script>
-        // 1. DEMO OTP LOGIC (For Testing)
+        let cart = [], total = 0;
         document.getElementById('send-otp-btn').addEventListener('click', () => {
-            let phone = document.getElementById('phone-input').value.trim();
-            phone = phone.replace(/\D/g, '');
-            if (phone.length === 12 && phone.startsWith('91')) {
-                phone = phone.slice(2);
-            } else if (phone.length === 13 && phone.startsWith('091')) {
-                phone = phone.slice(3);
-            }
-
-            if (phone.length !== 10) {
-                alert('Kripya sahi 10 digit ka mobile number dalein!');
-                return;
-            }
-
-            // Generate Demo OTP
-            const generatedOtp = Math.floor(100000 + Math.random() * 900000);
-            localStorage.setItem('savedOtp', generatedOtp);
-
-            // Display Demo OTP in Popup
-            alert(`[DEMO MODE] Aapka OTP hai: ${generatedOtp}`);
-            document.getElementById('phone-step').style.display = 'none';
+            const otp = "123456";
+            localStorage.setItem('otp', otp);
+            alert("[DEMO] Aapka OTP hai: " + otp);
             document.getElementById('otp-step').style.display = 'block';
         });
-
         document.getElementById('verify-otp-btn').addEventListener('click', () => {
-            const userInputOtp = document.getElementById('otp-input').value.trim();
-            const savedOtp = localStorage.getItem('savedOtp');
-
-            if (userInputOtp === savedOtp) {
-                alert('Login Successful! Welcome to UK TRENDS.');
+            if(document.getElementById('otp-input').value === localStorage.getItem('otp')) {
                 document.getElementById('login-modal').style.display = 'none';
-            } else {
-                alert('Wrong OTP! Sahi OTP daalein.');
-            }
+            } else { alert("Wrong OTP"); }
         });
-
-        // 2. CART LOGIC
-        window.cart = [];
-
-        window.addToCart = function(id, name, price) {
-            let item = window.cart.find(i => i.id === id);
-            if (item) {
-                item.qty++;
-            } else {
-                window.cart.push({ id, name, price, qty: 1 });
-            }
-            updateCartUI();
-            alert(name + ' added to cart!');
-        };
-
-        window.changeQty = function(index, amount) {
-            window.cart[index].qty += amount;
-            if (window.cart[index].qty === 0) {
-                window.cart.splice(index, 1);
-            }
-            updateCartUI();
-        };
-
-        window.toggleCart = function() {
-            const modal = document.getElementById('cart-modal');
-            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
-        };
-
-        window.showCheckoutForm = function() {
-            if(window.cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
-            }
-            document.getElementById('checkout-form-div').style.display = 'block';
-            toggleCart();
-        };
+        function addToCart(name, price) {
+            cart.push({name, price}); total += price;
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-total').innerText = total;
+            document.getElementById('cart-items').innerHTML += `<p>${name} - ₹${price}</p>`;
+            alert(name + " added!");
+        }
+        function toggleCart() {
+            document.getElementById('cart-modal').style.display = (document.getElementById('cart-modal').style.display === 'flex') ? 'none' : 'flex';
+        }
     </script>
 </body>
 </html>
