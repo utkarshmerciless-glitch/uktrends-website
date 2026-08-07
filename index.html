@@ -273,11 +273,9 @@
     </footer>
 
     <script>
-        // 1. OTP LOGIC (Fast2SMS)
-        document.getElementById('send-otp-btn').addEventListener('click', async () => {
+        // 1. DEMO OTP LOGIC (For Testing)
+        document.getElementById('send-otp-btn').addEventListener('click', () => {
             let phone = document.getElementById('phone-input').value.trim();
-            const apiKey = 'K25UNoxHgQnqIhjwtYSTEB7bcpVfkAF9J8iruvZXPCmsD3L4G0kuDcnpmysPZwCI7JMNq6QogBjOGAz4'; 
-            
             phone = phone.replace(/\D/g, '');
             if (phone.length === 12 && phone.startsWith('91')) {
                 phone = phone.slice(2);
@@ -290,35 +288,14 @@
                 return;
             }
 
+            // Generate Demo OTP
             const generatedOtp = Math.floor(100000 + Math.random() * 900000);
             localStorage.setItem('savedOtp', generatedOtp);
 
-            const message = `Aapka UK TRENDS verification code hai: ${generatedOtp}`;
-            const targetUrl = `https://www.fast2sms.com/dev/bulkV2?route=q&message=${encodeURIComponent(message)}&language=english&flash=0&numbers=${phone}`;
-            const url = `https://corsproxy.io/?` + encodeURIComponent(targetUrl);
-
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        "authorization": apiKey,
-                        "cache-control": "no-cache"
-                    }
-                });
-                
-                const data = await response.json();
-                
-                if (data.return === true) {
-                    alert('OTP successfully bhej diya gaya hai!');
-                    document.getElementById('phone-step').style.display = 'none';
-                    document.getElementById('otp-step').style.display = 'block';
-                } else {
-                    alert('OTP bhejne mein error aayi: ' + (data.message || 'Unknown error'));
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Network error aa gaya!');
-            }
+            // Display Demo OTP in Popup
+            alert(`[DEMO MODE] Aapka OTP hai: ${generatedOtp}`);
+            document.getElementById('phone-step').style.display = 'none';
+            document.getElementById('otp-step').style.display = 'block';
         });
 
         document.getElementById('verify-otp-btn').addEventListener('click', () => {
