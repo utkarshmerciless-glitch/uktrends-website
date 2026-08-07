@@ -239,4 +239,10 @@ render();updateCart();
   </div>
 </footer>
 </body>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/uktrends-website/sw.js');
+  }
+  </script>
+  
 </html>
