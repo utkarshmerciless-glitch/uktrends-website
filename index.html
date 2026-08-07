@@ -1,236 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UK TRENDS | Official Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#f4f6f8;color:#333}
-header{background:#0B1F3A;color:white;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000}
-.logo{font-size:24px;font-weight:bold;color:#ff6b00;text-decoration:none}
-.cart-icon{cursor:pointer;background:#ff6b00;padding:8px 15px;border-radius:20px;font-weight:bold}
-.hero{background:linear-gradient(135deg,#0B1F3A,#ff6b00);color:white;padding:40px 20px;text-align:center}
-.hero h1{font-size:32px}.hero p{font-size:16px;margin-top:10px}
-.categories{display:flex;gap:10px;overflow-x:auto;padding:20px;white-space:nowrap}
-.cat-btn{background:white;border:1px solid #ccc;padding:8px 15px;border-radius:20px;cursor:pointer;font-weight:bold}
-.cat-btn.active{background:#0B1F3A;color:white;border:none}
-.products{padding:0 20px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px}
-.card{background:white;padding:10px;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,.05);text-align:center;position:relative}
-.card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
-.price{color:#ff6b00;font-size:18px;font-weight:bold;margin:8px 0}
-.card button{background:#0B1F3A;color:white;border:none;padding:8px;width:100%;border-radius:6px;cursor:pointer;font-weight:bold}
-.wishlist-btn{position:absolute;top:15px;right:15px;background:white!important;color:#333!important;border:none;width:30px!important;height:30px;padding:0!important;border-radius:50%!important;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.2)}
-.modal{position:fixed;top:0;right:-100%;width:350px;max-width:100%;height:100vh;background:white;box-shadow:-5px 0 15px rgba(0,0,0,.1);transition:.3s;z-index:1001;display:flex;flex-direction:column}
-.modal.active{right:0}
-.modal-header{display:flex;justify-content:space-between;padding:20px;border-bottom:1px solid #eee;background:#f8f8f8}
-.close-btn{background:none!important;border:none!important;font-size:24px;cursor:pointer;color:red!important;width:auto!important}
-.cart-content{padding:20px;overflow-y:auto;flex:1}
-.cart-item{border-bottom:1px solid #eee;padding:12px 0}
-.cart-item img{width:60px;height:60px;object-fit:cover;border-radius:6px}
-.qty-btn{background:#0B1F3A!important;color:white!important;border:none!important;width:30px!important;padding:5px!important;border-radius:5px!important}
-.cart-footer{padding:15px 20px;border-top:1px solid #eee}
-.checkout-btn{background:#ff6b00!important;color:white!important;border:none!important;padding:12px!important;width:100%!important;border-radius:6px!important;font-weight:bold!important;cursor:pointer}
-.checkout-form{padding:20px;overflow-y:auto;flex:1}
-.form-group{margin-bottom:15px}
-.form-group label{display:block;font-size:14px;margin-bottom:5px;font-weight:bold}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px}
-.upi-info{background:#e3f2fd;padding:10px;border-radius:6px;margin-top:10px;font-size:14px;display:none;border:1px solid #90caf9}
-footer{background:#0B1F3A;color:white;text-align:center;padding:20px;margin-top:30px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK TRENDS - Official Online Store</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+        header { background: #0B1F3A; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { margin: 0; font-size: 24px; }
+        .cart-btn { background: #ff6b00; color: white; border: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        /* Login Modal Styles */
+        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+        .login-box { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center; }
+        .login-box h2 { margin-top: 0; color: #0B1F3A; }
+        .login-box input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        .login-box button { background: #0B1F3A; color: white; border: none; padding: 12px 20px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        #recaptcha-container { margin: 15px 0; display: flex; justify-content: center; }
+
+        /* Products Styles */
+        .categories { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .cat-btn { padding: 10px 20px; border: 1px solid #0B1F3A; background: white; cursor: pointer; border-radius: 20px; }
+        .cat-btn.active { background: #0B1F3A; color: white; }
+        
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; max-width: 1000px; margin: auto; }
+        .product-card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-card button { background: #ff6b00; color: white; border: none; padding: 8px 15px; width: 100%; border-radius: 5px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+
+        /* Cart Modal */
+        #cart-modal { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100vh; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 1000; flex-direction: column; }
+        .cart-header { display: flex; justify-content: space-between; padding: 15px; background: #0B1F3A; color: white; }
+        .close-cart { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+        .cart-items { padding: 15px; flex-grow: 1; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .qty-btn { background: #eee; border: 1px solid #ccc; padding: 5px 10px; cursor: pointer; font-weight: bold; }
+        .cart-footer { padding: 15px; background: #f9f9f9; border-top: 1px solid #eee; }
+        .checkout-btn { background: #28a745; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        /* Checkout Form */
+        #checkout-form-div { display: none; padding: 15px; }
+        .checkout-input { width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        
+        footer { text-align: center; padding: 20px; background: #0B1F3A; color: white; margin-top: 40px; }
+    </style>
 </head>
 <body>
 
-<header>
-<a href="#" class="logo">🛒 UK TRENDS</a>
-<div class="cart-icon" onclick="toggleModal('cart-modal')">Cart (<span id="cart-count">0</span>)</div>
-</header>
+    <!-- Firebase Phone Auth Login Modal -->
+    <div id="login-modal">
+        <div class="login-box">
+            <h2>Login to UK TRENDS</h2>
+            <p>Please verify your number to continue shopping.</p>
+            
+            <div id="phone-step">
+                <input type="tel" id="phone-input" placeholder="+91 1234567890" value="+91">
+                <div id="recaptcha-container"></div>
+                <button id="send-otp-btn">Send OTP</button>
+            </div>
 
-<section class="hero">
-<h1>Quality Products, Best Prices</h1>
-<p>Fast Delivery in Lucknow</p>
-</section>
+            <div id="otp-step" style="display:none;">
+                <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
+                <button id="verify-otp-btn">Verify & Login</button>
+            </div>
+        </div>
+    </div>
 
-<div class="categories">
-<button class="cat-btn active" onclick="filterProducts('All',this)">All</button>
-<button class="cat-btn" onclick="filterProducts('Fashion',this)">Fashion</button>
-<button class="cat-btn" onclick="filterProducts('Grocery',this)">Grocery</button>
-<button class="cat-btn" onclick="filterProducts('Baby Care',this)">Baby Care</button>
-</div>
+    <header>
+        <h1>UK TRENDS</h1>
+        <button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
+    </header>
 
-<section class="products" id="products-container"></section>
+    <div class="categories">
+        <button class="cat-btn active">All</button>
+        <button class="cat-btn">Fashion</button>
+        <button class="cat-btn">Grocery</button>
+        <button class="cat-btn">Baby Care</button>
+    </div>
 
-<!-- Cart Modal -->
-<div class="modal" id="cart-modal">
-<div class="modal-header">
-<h2>Your Cart</h2>
-<button class="close-btn" onclick="toggleModal('cart-modal')">✖</button>
-</div>
-<div class="cart-content" id="cart-items"></div>
-<div class="cart-footer">
-<div style="font-size:18px;font-weight:bold;margin-bottom:10px">Total: ₹<span id="total-price">0</span></div>
-<button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
-</div>
-</div>
+    <!-- Products Section -->
+    <div class="products">
+        <div class="product-card">
+            <h3>Polo Neck T-Shirt</h3>
+            <p>Fashion</p>
+            <h4>₹450</h4>
+            <button onclick="addToCart(1, 'Polo Neck T-Shirt', 450)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <h3>Fresh Apples (1kg)</h3>
+            <p>Grocery</p>
+            <h4>₹150</h4>
+            <button onclick="addToCart(2, 'Fresh Apples', 150)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <h3>Baby Lotion</h3>
+            <p>Baby Care</p>
+            <h4>₹220</h4>
+            <button onclick="addToCart(3, 'Baby Lotion', 220)">Add to Cart</button>
+        </div>
+    </div>
 
-<!-- Order Success Modal -->
-<div id="order-success-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1100;justify-content:center;align-items:center">
-<div style="background:white;padding:30px;border-radius:12px;text-align:center;max-width:400px;width:90%">
-<div style="font-size:50px;margin-bottom:10px">✅</div>
-<h2 style="margin-bottom:10px">Order Placed Successfully!</h2>
-<p style="color:#666;font-size:14px;margin-bottom:20px">Thank you for shopping with <b>UK TRENDS</b>.</p>
-<div id="success-order-details" style="background:#f8f9fa;padding:10px;border-radius:8px;font-size:13px;margin-bottom:20px;text-align:left"></div>
-<button onclick="closeOrderSuccess()" class="checkout-btn">Continue Shopping</button>
-</div>
-</div>
+    <!-- Cart Modal -->
+    <div id="cart-modal">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()">X</button>
+        </div>
+        
+        <!-- Cart Items List -->
+        <div id="cart-items" class="cart-items">
+            <p style="text-align:center;">Cart is empty!</p>
+        </div>
+        
+        <!-- Cart Footer -->
+        <div class="cart-footer">
+            <h3>Total: ₹<span id="cart-total">0</span></h3>
+            <button class="checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout</button>
+            
+            <!-- Formspree Checkout Form -->
+            <div id="checkout-form-div">
+                <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+                    <input type="text" name="Name" class="checkout-input" placeholder="Full Name" required>
+                    <input type="text" name="Address" class="checkout-input" placeholder="Delivery Address" required>
+                    <select name="Payment_Method" class="checkout-input">
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                        <option value="UPI">UPI Payment</option>
+                    </select>
+                    <input type="hidden" name="Order_Details" id="order-details-hidden">
+                    <input type="hidden" name="Customer_Phone" id="customer-phone-hidden">
+                    <button type="submit" class="checkout-btn" style="background:#0B1F3A;">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-<!-- Checkout Modal -->
-<div class="modal" id="checkout-modal">
-<div class="modal-header">
-<h2>Checkout Details</h2>
-<button class="close-btn" onclick="toggleModal('checkout-modal')">✖</button>
-</div>
-<form class="checkout-form" action="https://formspree.io/f/xvkpoyag" method="POST" id="order-form" onsubmit="prepareFormspreeData()">
-<input type="hidden" name="Order_Details" id="form-order-details">
-<input type="hidden" name="Total_Amount" id="form-total-amount">
-<div class="form-group"><label>Full Name</label><input type="text" name="Name" required placeholder="Enter your name"></div>
-<div class="form-group"><label>Phone Number</label><input type="tel" name="Phone" required placeholder="Your WhatsApp number"></div>
-<div class="form-group"><label>Delivery Address</label><textarea name="Address" rows="3" required placeholder="Complete address in Lucknow"></textarea></div>
-<div class="form-group">
-<label>Payment Method</label>
-<select name="Payment_Method" id="payment-method" onchange="toggleUPIInfo()">
-<option value="Cash on Delivery">Cash on Delivery (COD)</option>
-<option value="UPI Online Payment">Online Payment (UPI)</option>
-</select>
-<div class="upi-info" id="upi-info"><strong>Pay via UPI to:</strong><br><span style="color:#ff6b00;font-weight:bold">utkarshkumar.shg-2@okaxis</span><br>Name: Utkarsh Kumar<br><small>*Please pay before submitting the order.</small></div>
-</div>
-<button type="submit" class="checkout-btn">Place Order (Email)</button>
-</form>
-</div>
+    <footer>
+        <h3>UK TRENDS</h3>
+        <p>Owner: Utkarsh Kumar</p>
+        <p>Location: Near Ambedkar University, Shaheed Path, Lucknow - 226025</p>
+        <p>WhatsApp: +91 7052561304</p>
+    </footer>
 
-<footer>
-<h3>UK TRENDS</h3>
-<p>Near Ambedkar University, Shaheed Path, Lucknow - 226025</p>
-<p>Owner: Utkarsh Kumar | WhatsApp: +91 7052561304</p>
-</footer>
+    <!-- FIREBASE AND WEBSITE LOGIC -->
+    <script type="module">
+        // 1. Firebase Setup (Aapki Chaabi/Config)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-<script>
-const products=[
-{id:1,name:"Men's Casual Shirt",price:699,category:"Fashion",image:"https://images.unsplash.com/photo-1596755094514-f87e32f6b717?w=300"},
-{id:2,name:"Women's Kurti",price:850,category:"Fashion",image:"https://images.unsplash.com/photo-1583391733958-d15ce69c8c07?w=300"},
-{id:3,name:"Aashirvaad Atta 5kg",price:280,category:"Grocery",image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"},
-{id:4,name:"Amul Butter 500g",price:260,category:"Grocery",image:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=300"},
-{id:5,name:"Baby Pampers Pants",price:450,category:"Baby Care",image:"https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=300"},
-{id:6,name:"Baby Lotion",price:199,category:"Baby Care",image:"https://images.unsplash.com/photo-1596268933215-d912444df48b?w=300"}
-];
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhSudxAHMMnaB1fOVEqJy1QuZmB3Fbq0E",
+            authDomain: "uk-trends-28eab.firebaseapp.com",
+            projectId: "uk-trends-28eab",
+            storageBucket: "uk-trends-28eab.firebasestorage.app",
+            messagingSenderId: "925607756574",
+            appId: "1:925607756574:web:f70b1eaa9ef7e07088bf0f",
+            measurementId: "G-044WGVK33F"
+        };
 
-let cart=JSON.parse(localStorage.getItem('uktrends_cart'))||[];
-let wishlist=JSON.parse(localStorage.getItem('uktrends_wishlist'))||[];
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-function renderProducts(filterCat='All'){
-let html='';
-let filtered=filterCat==='All'?products:products.filter(p=>p.category===filterCat);
-filtered.forEach(item=>{
-let isWished=wishlist.includes(item.id)?"❤️":"🤍";
-html+=`<div class="card">
-<button class="wishlist-btn" onclick="toggleWishlist(${item.id},this)">${isWished}</button>
-<img src="${item.image}" alt="${item.name}">
-<h3 style="font-size:14px;margin-top:10px">${item.name}</h3>
-<div class="price">₹${item.price}</div>
-<button onclick="addToCart(${item.id})">Add to Cart</button>
-</div>`;
-});
-document.getElementById("products-container").innerHTML=html;
-}
+        // Check if user is already logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('customer-phone-hidden').value = user.phoneNumber;
+            } else {
+                document.getElementById('login-modal').style.display = 'flex';
+                setupRecaptcha();
+            }
+        });
 
-function filterProducts(category,btn){
-document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-renderProducts(category);
-}
+        // Setup Recaptcha
+        function setupRecaptcha() {
+            if(!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                    'size': 'normal'
+                });
+                window.recaptchaVerifier.render();
+            }
+        }
 
-function toggleModal(id){
-document.getElementById(id).classList.toggle('active');
-}
+        // Send OTP Button
+        document.getElementById('send-otp-btn').addEventListener('click', () => {
+            const phoneNumber = document.getElementById('phone-input').value;
+            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+                .then((confirmationResult) => {
+                    window.confirmationResult = confirmationResult;
+                    document.getElementById('phone-step').style.display = 'none';
+                    document.getElementById('otp-step').style.display = 'block';
+                }).catch((error) => {
+                    alert("OTP bhejne mein dikkat aayi. Check number format (+91...)");
+                    console.error(error);
+                });
+        });
 
-function addToCart(id){
-let product=products.find(p=>p.id===id);
-let existing=cart.find(c=>c.id===id);
-if(existing) existing.qty++;
-else cart.push({...product,qty:1});
-saveCart();
-alert(product.name+" added to cart!");
-}
+        // Verify OTP Button
+        document.getElementById('verify-otp-btn').addEventListener('click', () => {
+            const code = document.getElementById('otp-input').value;
+            window.confirmationResult.confirm(code).then((result) => {
+                alert("Login Successful! Welcome to UK TRENDS.");
+                document.getElementById('login-modal').style.display = 'none';
+            }).catch((error) => {
+                alert("Wrong OTP! Sahi OTP daalein.");
+            });
+        });
 
-function changeQty(id,amount){
-let item=cart.find(c=>c.id===id);
-if(item){
-item.qty+=amount;
-if(item.qty<=0) cart=cart.filter(c=>c.id!==id);
-}
-saveCart();
-}
+        // 2. CART LOGIC (Website ka Cart System)
+        window.cart = [];
 
-function saveCart(){
-localStorage.setItem('uktrends_cart',JSON.stringify(cart));
-updateCartUI();
-}
+        window.addToCart = function(id, name, price) {
+            let item = window.cart.find(i => i.id === id);
+            if (item) {
+                item.qty++;
+            } else {
+                window.cart.push({ id, name, price, qty: 1 });
+            }
+            updateCartUI();
+            alert(name + " added to cart!");
+        };
 
-function updateCartUI(){
-let html='',total=0,count=0;
-cart.forEach(item=>{
-total+=item.price*item.qty;
-count+=item.qty;
-html+=`<div class="cart-item">
-<div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-<div style="display:flex;gap:10px;align-items:center">
-<img src="${item.image}">
-<div><div style="font-size:14px;font-weight:bold">${item.name}</div><div style="color:#ff6b00">₹${item.price}</div></div>
-</div>
-<div style="display:flex;align-items:center;gap:5px">
-<button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
-<span>${item.qty}</span>
-<button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
-</div>
-</div></div>`;
-});
-document.getElementById("cart-items").innerHTML=html||"<p style='text-align:center'>Cart is empty.</p>";
-document.getElementById("total-price").innerText=total;
-document.getElementById("cart-count").innerText=count;
-}
+        window.updateCartUI = function() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            const orderDetailsHidden = document.getElementById('order-details-hidden');
 
-function toggleWishlist(id,btn){
-if(wishlist.includes(id)){
-wishlist=wishlist.filter(x=>x!==id);btn.innerText="🤍";
-}else{wishlist.push(id);btn.innerText="❤️";}
-localStorage.setItem('uktrends_wishlist',JSON.stringify(wishlist));
-}
+            cartItemsDiv.innerHTML = "";
+            let total = 0;
+            let totalItems = 0;
+            let orderText = "";
 
-function openCheckout(){
-if(cart.length===0)return alert("Your cart is empty!");
-toggleModal('cart-modal');
-toggleModal('checkout-modal');
-}
+            if (window.cart.length === 0) {
+                cartItemsDiv.innerHTML = "<p style='text-align:center;'>Cart is empty!</p>";
+            } else {
+                window.cart.forEach((item, index) => {
+                    total += item.price * item.qty;
+                    totalItems += item.qty;
+                    orderText += `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty} | `;
+                    
+                    cartItemsDiv.innerHTML += `
+                        <div class="cart-item">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                ₹${item.price} x ${item.qty} = ₹${item.price * item.qty}
+                            </div>
+                            <div>
+                                <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
 
-function toggleUPIInfo(){
-let method=document.getElementById("payment-method").value;
-document.getElementById("upi-info").style.display=method==="UPI Online Payment"?"block":"none";
-}
+            cartCount.innerText = totalItems;
+            cartTotal.innerText = total;
+            orderDetailsHidden.value = orderText + ` Total: ₹${total}`;
+        };
 
-function prepareFormspreeData(){
-let orderText=cart.map(item=>`${item.name} (x${item.qty}) - ₹${item.price*item.qty}`).join(" | ");
-let total=cart.reduce((sum,item)=>sum+item.price*item.qty,0);
-document.getElementById("form-order-details").value=orderText;
-document.getElementById("form-total-amount").value="₹"+total;
-}
+        window.changeQty = function(index, amount) {
+            window.cart[index].qty += amount;
+            if (window.cart[index].qty === 0) {
+                window.cart.splice(index, 1);
+            }
+            updateCartUI();
+        };
 
-function closeOrderSuccess(){
-document.getElementById("order-success-modal").style.display="none";
-}
+        window.toggleCart = function() {
+            const modal = document.getElementById('cart-modal');
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        };
 
-renderProducts();
-updateCartUI();
-</script>
+        window.showCheckoutForm = function() {
+            if(window.cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            document.getElementById('checkout-form-div').style.display = 'block';
+        };
+    </script>
 </body>
 </html>
