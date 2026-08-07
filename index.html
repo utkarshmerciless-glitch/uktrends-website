@@ -218,6 +218,45 @@
             alert(name + " added to cart!");
         };
 
+    window.updateCartUI = function() {
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
+    const orderDetailsHidden = document.getElementById('order-details-hidden');
+
+    cartItemsDiv.innerHTML = "";
+    let total = 0;
+    let totalItems = 0;
+    let orderText = "";
+
+    if (window.cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p style='text-align:center;'>Cart is empty!</p>";
+    } else {
+        window.cart.forEach((item, index) => {
+            total += item.price * item.qty;
+            totalItems += item.qty;
+            orderText += `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty} | `;
+
+            cartItemsDiv.innerHTML += `
+                <div class="cart-item">
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        ₹${item.price} x ${item.qty} = ₹${item.price * item.qty}
+                    </div>
+                    <div>
+                        <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    if (cartCount) cartCount.innerText = totalItems;
+    if (cartTotal) cartTotal.innerText = total;
+    if (orderDetailsHidden) orderDetailsHidden.value = orderText + ` Total: ₹${total}`;
+};
         window.updateCartUI = function() {
             const cartItemsDiv = document.getElementById('cart-items');
             const cartCount = document.getElementById('cart-count');
