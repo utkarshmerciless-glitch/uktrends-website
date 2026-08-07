@@ -9,34 +9,81 @@
 header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ddd;padding:14px 18px}
 .top{font-weight:900;font-size:28px;color:#f36f00}.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .search{flex:1;min-width:220px;padding:14px;border:1px solid #ccc;border-radius:12px;font-size:16px}
-button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer}.cart{background:#ff7000;color:#fff}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer}
+.cart{background:#ff7000;color:#fff}.login-btn{background:#007bff;color:#fff}
 .controls{display:flex;gap:8px;padding:12px 18px;flex-wrap:wrap}.controls select{padding:10px;border-radius:9px;border:1px solid #ccc;background:#fff}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 18px 24px}
 .card{background:#fff;border:1px solid #ddd;border-radius:14px;overflow:hidden}.pic{aspect-ratio:1/1;background:#eee;position:relative}.pic img{width:100%;height:100%;object-fit:cover;display:block}
 .info{padding:12px}.name{font-size:17px;font-weight:800;min-height:42px}.rating{color:#168c58;font-weight:800;margin:7px 0}.price{font-size:22px;font-weight:900}.old{text-decoration:line-through;color:#999;font-size:14px;margin-left:5px}.off{color:#168c58;font-weight:800;margin-left:5px}
 .actions{display:flex;gap:7px;margin-top:10px}.add{background:#ff7000;color:#fff;flex:1}.view{background:#eee}
 .pages{display:flex;justify-content:center;gap:8px;align-items:center;padding:8px 18px 30px}.pages button{background:#fff;border:1px solid #ccc}
-.overlay{position:fixed;inset:0;background:#0008;display:none;z-index:30}.drawer{position:absolute;right:0;top:0;height:100%;width:min(520px,94vw);background:#fff;padding:20px;overflow:auto}.close{float:right;background:#eee;border-radius:50%;padding:10px 14px}.cartrow{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:12px 0}.cartrow img{width:70px;height:70px;object-fit:cover;border-radius:8px}.total{font-size:24px;font-weight:900;margin:18px 0}.checkout{background:#079653;color:#fff;width:100%}
+.overlay{position:fixed;inset:0;background:#0008;display:none;z-index:30}.drawer{position:absolute;right:0;top:0;height:100%;width:min(520px,94vw);background:#fff;padding:20px;overflow:auto}.close{float:right;background:#eee;border-radius:50%;padding:10px 14px}.cartrow{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:12px 0}.cartrow img{width:70px;height[span_0](start_span)[span_0](end_span):70px;object-fit:cover;border-radius:8px}.total{font-size:24px;font-weight:900;margin:18px 0}.checkout{background:#079653;color:#fff;width:100%}
 .modal{position:fixed;inset:0;background:#0009;display:none;z-index:40;padding:20px;overflow:auto}.box{background:#fff;max-width:900px;margin:20px auto;border-radius:16px;padding:18px}.views{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.views img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
+footer{background:#fff;border-top:1px solid #ddd;padding:20px;text-align:center;margin-top:30px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.grid{gap:8px;padding:0 8px 20px}.info{padding:9px}.name{font-size:15px}.price{font-size:19px}.top{font-size:24px}}
 </style>
 </head>
 <body>
-<header><div class="bar"><div class="top">UK TRENDS</div><input id="q" class="search" placeholder="Search 80,000 products..." oninput="search()"><button class="cart" onclick="openCart()">🛒 Cart (<span id="cc">0</span>)</button></div></header>
-<div class="controls"><select id="cat" onchange="search()"><option value="">All categories</option><option>Fashion</option><option>Groceries</option><option>Electronics</option><option>Beauty</option><option>Home</option><option>Kids</option><option>Pets</option><option>Accessories</option></select><select id="sort" onchange="search()"><option value="default">Recommended</option><option value="low">Price low to high</option><option value="high">Price high to low</option></select></div>
-<div id="grid" class="grid"></div><div id="pages" class="pages"></div>
+<header>
+  <div class="bar">
+    <div class="top">UK TRENDS</div>
+    <input id="q" class="search" placeholder="Search 80,000 products..." oninput="search()">
+    <button class="login-btn" onclick="openLogin()">👤 Login</button>
+    <button class="cart" onclick="openCart()">🛒 Cart (<span id="cc">0</span>)</button>
+  </div>
+</header>
 
-<div id="overlay" class="overlay" onclick="if(event.target.id==='overlay')closeCart()"><div class="drawer"><button class="close" onclick="closeCart()">✕</button><h1>Your Cart</h1><div id="cartlist"></div><div class="total">Total: ₹<span id="total">0</span></div><button class="checkout" onclick="checkout()">COD Checkout</button></div></div>
-<div id="modal" class="modal"><div class="box"><button class="close" onclick="closeProduct()">✕</button><div id="detail"></div></div></div>
+<div class="controls">
+  <select id="cat" onchange="search()">
+    <option value="">All categories</option>
+    <option>Fashion</option>
+    <option>Groceries</option>
+    <option>Electronics</option>
+    <option>Beauty</option>
+    <option>Home</option>
+    <option>Kids</option>
+    <option>Pets</option>
+    <option>Accessories</option>
+  </select>
+  <select id="sort" onchange="search()">
+    <option value="default">Recommended</option>
+    <option value="low">Price low to high</option>
+    <option value="high">Price high to low</option>
+  </select>
+</div>
+
+<div id="grid" class="grid"></div>
+<div id="pages" class="pages"></div>
+
+<div id="overlay" class="overlay" onclick="if(event.target.id==='overlay')closeCart()">
+  <div class="drawer">
+    <button class="close" onclick="closeCart()">✕</button>
+    <h1>Your Cart</h1>
+    <div id="cartlist"></div>
+    <div class="total">Total: ₹<span id="total">0</span></div>
+    <button class="checkout" onclick="checkout()">COD Checkout</button>
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="box">
+    <button class="close" onclick="closeProduct()">✕</button>
+    <div id="detail"></div>
+  </div>
+</div>
+
+<div id="loginModal" class="modal">
+  <div class="box" style="max-width: 400px; text-align: center;">
+    <button class="close" onclick="closeLogin()">✕</button>
+    <h2>Login to UK TRENDS</h2>
+    <input type="email" id="email" placeholder="Email Address" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;">
+    <input type="password" id="pass" placeholder="Password" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;">
+    <button style="background: #ff7000; color: #fff; width: 100%; padding: 12px; font-weight: bold; margin-top: 10px;" onclick="handleLogin()">LOGIN</button>
+  </div>
+</div>
 
 <script>
-/*
-  80,000 catalogue records.
-  Each record has 6 photo views. Photos are fetched lazily only when shown.
-  IMPORTANT: These are demo image URLs from LoremFlickr, so replace them with
-  your own supplier/product photos before using the store commercially.
-*/
 const cats=["Fashion","Groceries","Electronics","Beauty","Home","Kids","Pets","Accessories"];
 const names={
 Fashion:["Men's Shirt","Women's Jeans","Men's T-Shirt","Women's Kurti","Men's Shoes","Women's Dress","Hoodie","Jacket"],
@@ -48,13 +95,17 @@ Kids:["Baby Romper","Kids T-Shirt","Kids Hoodie","Kids Shoes","School Bag","Kids
 Pets:["Dog Food","Cat Food","Dog Toy","Cat Toy","Pet Bowl","Pet Leash","Pet Bed","Pet Shampoo"],
 Accessories:["Backpack","Wallet","Sunglasses","Wrist Watch","Cap","Belt","Handbag","Travel Pouch"]
 };
+
 const products=Array.from({length:80000},(_,i)=>{
   const id=i+1, cat=cats[i%cats.length], base=names[cat][i%8];
   const price=299+((i*137)%8500), off=10+((i*7)%51), old=Math.round(price/(1-off/100));
   return {id,cat,name:`${base} — Edition ${Math.floor(i/8)+1}`,price,old,off,rating:(4+(i%10)/10).toFixed(1),reviews:100+(i*73)%9800};
 });
+
 const pageSize=24; let page=1, filtered=products, cart=[];
-const img=(p,v)=>`https://loremflickr.com/800/800/${encodeURIComponent(p.cat+','+p.name.split(' — ')[0])}?lock=${p.id*10+v}`;
+// Updated fast and working image service
+const img=(p,v)=>`https://picsum.photos/seed/${p.id*10+v}/600/600`;
+
 function render(){
  const start=(page-1)*pageSize, list=filtered.slice(start,start+pageSize);
  document.getElementById('grid').innerHTML=list.map(p=>`<article class="card">
@@ -65,6 +116,7 @@ function render(){
  const total=Math.max(1,Math.ceil(filtered.length/pageSize));
  document.getElementById('pages').innerHTML=`<button onclick="go(${Math.max(1,page-1)})">‹</button><b>Page ${page} / ${total}</b><button onclick="go(${Math.min(total,page+1)})">›</button>`;
 }
+
 function go(n){page=n;render();scrollTo(0,0)}
 function search(){
  const q=document.getElementById('q').value.toLowerCase().trim(), c=document.getElementById('cat').value, s=document.getElementById('sort').value;
@@ -72,17 +124,40 @@ function search(){
  if(s==='low')filtered.sort((a,b)=>a.price-b.price); if(s==='high')filtered.sort((a,b)=>b.price-a.price);
  page=1;render();
 }
+
 function add(id){const p=products[id-1], x=cart.find(x=>x.id===id); x?x.qty++:cart.push({id,qty:1});updateCart();alert(`${p.name} added to cart`)}
-function updateCart(){document.getElementById('cc').textContent=cart.reduce((a,x)=>a+x.qty,0);const list=document.getElementById('cartlist');let total=0;
+function updateCart(){
+ document.getElementById('cc').textContent=cart.reduce((a,x)=>a+x.qty,0);
+ const list=document.getElementById('cartlist');let total=0;
  list.innerHTML=cart.map(x=>{const p=products[x.id-1];total+=p.price*x.qty;return `<div class="cartrow"><img src="${img(p,0)}"><div style="flex:1"><b>${p.name}</b><br>₹${p.price.toLocaleString()} × ${x.qty}<br><button onclick="dec(${x.id})">−</button> <button onclick="add(${x.id})">+</button></div></div>`}).join('')||'<p>Your cart is empty.</p>';
- document.getElementById('total').textContent=total.toLocaleString()}
+ document.getElementById('total').textContent=total.toLocaleString();
+}
 function dec(id){const x=cart.find(x=>x.id===id);if(!x)return;x.qty--;if(x.qty<=0)cart=cart.filter(y=>y.id!==id);updateCart()}
-function openCart(){updateCart();document.getElementById('overlay').style.display='block'}function closeCart(){document.getElementById('overlay').style.display='none'}
-function openProduct(id){const p=products[id-1];document.getElementById('detail').innerHTML=`<h1>${p.name}</h1><p><b>${p.cat}</b> · ★ ${p.rating} · ${p.reviews.toLocaleString()} reviews</p><div class="views">${[0,1,2,3,4,5].map(v=>`<img loading="lazy" src="${img(p,v)}" alt="${p.name} view ${v+1}">`).join('')}</div><h2>₹${p.price.toLocaleString()} <small class="old">₹${p.old.toLocaleString()}</small></h2><button class="add" onclick="add(${p.id});closeProduct()">ADD TO CART</button>`;document.getElementById('modal').style.display='block'}
+function openCart(){updateCart();document.getElementById('overlay').style.display='block'}
+function closeCart(){document.getElementById('overlay').style.display='none'}
+
+function openProduct(id){
+ const p=products[id-1];
+ document.getElementById('detail').innerHTML=`<h1>${p.name}</h1><p><b>${p.cat}</b> · ★ ${p.rating} · ${p.reviews.toLocaleString()} reviews</p><div class="views">${[0,1,2,3,4,5].map(v=>`<img loading="lazy" src="${img(p,v)}" alt="${p.name} view ${v+1}">`).join('')}</div><h2>₹${p.price.toLocaleString()} <small class="old">₹${p.old.toLocaleString()}</small></h2><button class="add" onclick="add(${p.id});closeProduct()">ADD TO CART</button>`;
+ document.getElementById('modal').style.display='block';
+}
 function closeProduct(){document.getElementById('modal').style.display='none'}
-function checkout(){if(!cart.length)return alert('Your cart is empty.');alert('COD checkout demo. Connect a secure backend/order service before taking live customer orders.')}
+
+function openLogin(){document.getElementById('loginModal').style.display='block'}
+function closeLogin(){document.getElementById('loginModal').style.display='none'}
+function handleLogin(){
+ const email=document.getElementById('email').value;
+ if(email){alert('Logged in successfully as ' + email);closeLogin();}else{alert('Please enter your email');}
+}
+
+function checkout(){
+ if(!cart.length)return alert('Your cart is empty.');
+ alert('COD checkout demo. Connect a secure backend/order service before taking live customer orders.');
+}
+
 render();updateCart();
 </script>
+
 <footer>
   <div style="font-size:14px;font-weight:800;letter-spacing:.5px;">UK TRENDS • STYLE • FASHION • EVERYDAY</div>
   <div style="margin-top:8px;">Owner: UTKARSH KUMAR</div>
@@ -96,4 +171,5 @@ render();updateCart();
     today, tomorrow, and always. ♾️”
   </div>
 </footer>
-</body></html>
+</body>
+</html>
