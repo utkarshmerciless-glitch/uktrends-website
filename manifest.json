@@ -1,0 +1,22 @@
+{
+  "name": "UK TRENDS",
+  "short_name": "UK Trends",
+  "start_url": "/uktrends-website/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f36f00",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_T-shirt.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ]
+}
+
