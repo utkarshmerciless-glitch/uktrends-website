@@ -17,7 +17,7 @@ button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:poin
 .info{padding:12px}.name{font-size:17px;font-weight:800;min-height:42px}.rating{color:#168c58;font-weight:800;margin:7px 0}.price{font-size:22px;font-weight:900}.old{text-decoration:line-through;color:#999;font-size:14px;margin-left:5px}.off{color:#168c58;font-weight:800;margin-left:5px}
 .actions{display:flex;gap:7px;margin-top:10px}.add{background:#ff7000;color:#fff;flex:1}.view{background:#eee}
 .pages{display:flex;justify-content:center;gap:8px;align-items:center;padding:8px 18px 30px}.pages button{background:#fff;border:1px solid #ccc}
-.overlay{position:fixed;inset:0;background:#0008;display:none;z-index:30}.drawer{position:absolute;right:0;top:0;height:100%;width:min(520px,94vw);background:#fff;padding:20px;overflow:auto}.close{float:right;background:#eee;border-radius:50%;padding:10px 14px}.cartrow{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:12px 0}.cartrow img{width:70px;height[span_0](start_span)[span_0](end_span):70px;object-fit:cover;border-radius:8px}.total{font-size:24px;font-weight:900;margin:18px 0}.checkout{background:#079653;color:#fff;width:100%}
+.overlay{position:fixed;inset:0;background:#0008;display:none;z-index:30}.drawer{position:absolute;right:0;top:0;height:100%;width:min(520px,94vw);background:#fff;padding:20px;overflow:auto}.close{float:right;background:#eee;border-radius:50%;padding:10px 14px}.cartrow{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:12px 0}.cartrow img{width:70px;height:70px;object-fit:cover;border-radius:8px}.total{font-size:24px;font-weight:900;margin:18px 0}.checkout{background:#079653;color:#fff;width:100%}
 .modal{position:fixed;inset:0;background:#0009;display:none;z-index:40;padding:20px;overflow:auto}.box{background:#fff;max-width:900px;margin:20px auto;border-radius:16px;padding:18px}.views{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.views img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
 footer{background:#fff;border-top:1px solid #ddd;padding:20px;text-align:center;margin-top:30px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
@@ -96,20 +96,36 @@ Pets:["Dog Food","Cat Food","Dog Toy","Cat Toy","Pet Bowl","Pet Leash","Pet Bed"
 Accessories:["Backpack","Wallet","Sunglasses","Wrist Watch","Cap","Belt","Handbag","Travel Pouch"]
 };
 
+// Precise category search terms for accurate images
+const categoryKeywords = {
+  Fashion: "clothing,fashion",
+  Groceries: "grocery,food",
+  Electronics: "gadgets,electronics",
+  Beauty: "cosmetics,skincare",
+  Home: "furniture,decor",
+  Kids: "toys,kids",
+  Pets: "pets,dogs",
+  Accessories: "watch,sunglasses"
+};
+
 const products=Array.from({length:80000},(_,i)=>{
   const id=i+1, cat=cats[i%cats.length], base=names[cat][i%8];
   const price=299+((i*137)%8500), off=10+((i*7)%51), old=Math.round(price/(1-off/100));
-  return {id,cat,name:`${base} — Edition ${Math.floor(i/8)+1}`,price,old,off,rating:(4+(i%10)/10).toFixed(1),reviews:100+(i*73)%9800};
+  return {id,cat,baseName:base,name:`${base} — Edition ${Math.floor(i/8)+1}`,price,old,off,rating:(4+(i%10)/10).toFixed(1),reviews:100+(i*73)%9800};
 });
 
 const pageSize=24; let page=1, filtered=products, cart=[];
-// Updated fast and working image service
-const img=(p,v)=>`https://picsum.photos/seed/${p.id*10+v}/600/600`;
+
+// Category wise reliable Unsplash HD images
+const img=(p,v)=>{
+  const keyword = categoryKeywords[p.cat] || "product";
+  return `https://source.unsplash.com/600x600/?${encodeURIComponent(keyword)}&sig=${p.id*10+v}`;
+};
 
 function render(){
  const start=(page-1)*pageSize, list=filtered.slice(start,start+pageSize);
  document.getElementById('grid').innerHTML=list.map(p=>`<article class="card">
- <div class="pic"><img loading="lazy" src="${img(p,0)}" alt="${p.name}"></div>
+ <div class="pic"><img loading="lazy" src="${img(p,0)}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600'"></div>
  <div class="info"><div class="name">${p.name}</div><div class="rating">★ ${p.rating} · ${p.reviews.toLocaleString()} reviews</div>
  <div class="price">₹${p.price.toLocaleString()} <span class="old">₹${p.old.toLocaleString()}</span><span class="off">${p.off}% off</span></div>
  <div class="actions"><button class="add" onclick="add(${p.id})">ADD TO CART</button><button class="view" onclick="openProduct(${p.id})">VIEW</button></div></div></article>`).join('');
