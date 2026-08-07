@@ -269,84 +269,198 @@
         <p>Owner: Utkarsh Kumar</p>
         <p>Location: Near Ambedkar University, Shaheed Path, Lucknow – 226025</p>
     </footer>
-
-
-    <script>
-        // 1. FIREBASE CONFIGURATION
-        const firebaseConfig = {
-  apiKey: "AIzaSyBhSudxAHMMnaB1fOVEqJy1QuZmB3Fbq0E",
-  authDomain: "uk-trends-28eab.firebaseapp.com",
-  projectId: "uk-trends-28eab",
-  storageBucket: "uk-trends-28eab.firebasestorage.app",
-  messagingSenderId: "925607756574",
-  appId: "1:925607756574:web:f70b1eaa9ef7e07088bf0f",
-  measurementId: "G-044WGVK33F"
-};
+      <script>
+    // 1. OTP LOGIC (Fast2SMS)
+    document.getElementById('send-otp-btn').addEventListener('click', async () => {
+        let phone = document.getElementById('phone-input').value.trim();
+        const apiKey = 'K25UNoxHgQnqIhjwtYSTEB7bcpVfkAF9J8iruvZXPCmsD3L4G0kuDcnpmysPZwCI7JMNq6QogBjOGAz4'; 
         
-        firebase.initializeApp(firebaseConfig);
+        phone = phone.replace(/\D/g, '');
+        if (phone.length === 12 && phone.startsWith('91')) {
+            phone = phone.slice(2);
+        } else if (phone.length === 13 && phone.startsWith('091')) {
+            phone = phone.slice(3);
+        }
 
-        // Setup reCAPTCHA and Phone Auth
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-            'size': 'normal'
-        });
+        if (phone.length !== 10) {
+            alert('Kripya sahi 10 digit ka mobile number dalein!');
+            return;
+        }
 
-        document.getElementById('send-otp-btn').addEventListener('click', () => {
-            const phoneNumber = document.getElementById('phone-input').value;
-            firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
-                .then((confirmationResult) => {
-                    window.confirmationResult = confirmationResult;
-                    document.getElementById('phone-step').style.display = 'none';
-                    document.getElementById('otp-step').style.display = 'block';
-                }).catch((error) => {
-                    alert(error.message);
-                });
-        });
+        const generatedOtp = Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('savedOtp', generatedOtp);
 
-        document.getElementById('verify-otp-btn').addEventListener('click', () => {
-            const code = document.getElementById('otp-input').value;
-            window.confirmationResult.confirm(code).then((result) => {
-                alert("Login Successful! Welcome to UK TRENDS.");
-                document.getElementById('login-modal').style.display = 'none';
-            }).catch((error) => {
-                alert("Wrong OTP! Sahi OTP daalein.");
+        const message = `Aapka UK TRENDS verification code hai: ${generatedOtp}`;
+        const url = `https://www.fast2sms.com/dev/bulkV2?route=q&message=${encodeURIComponent(message)}&language=english&flash=0&numbers=${phone}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    "authorization": apiKey,
+                    "cache-control": "no-cache"
+                }
             });
-        });
-
-        // 2. CART LOGIC
-        window.cart = [];
-
-        window.addToCart = function(id, name, price) {
-            let item = window.cart.find(i => i.id === id);
-            if (item) {
-                item.qty++;
+            
+            const data = await response.json();
+            
+            if (data.return === true) {
+                alert('OTP successfully bhej diya gaya hai!');
+                document.getElementById('phone-step').style.display = 'none';
+                document.getElementById('otp-step').style.display = 'block';
             } else {
-                window.cart.push({ id, name, price, qty: 1 });
+                alert('OTP bhejne mein error aayi: ' + (data.message || 'Unknown error'));
             }
-            updateCartUI();
-            alert(name + " added to cart!");
-        };
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Network error aa gaya!');
+        }
+    });
 
-        window.changeQty = function(index, amount) {
-            window.cart[index].qty += amount;
-            if (window.cart[index].qty === 0) {
-                window.cart.splice(index, 1);
+    document.getElementById('verify-otp-btn').addEventListener('click', () => {
+        const userInputOtp = document.getElementById('otp-input').value.trim();
+        const savedOtp = localStorage.getItem('savedOtp');
+
+        if (userInputOtp === savedOtp) {
+            alert('Login Successful! Welcome to UK TRENDS.');
+            document.getElementById('login-modal').style.display = 'none';
+        } else {
+            alert('Wrong OTP! Sahi OTP daalein.');
+        }
+    });
+
+    // 2. CART LOGIC
+    window.cart = [];
+
+    window.addToCart = function(id, name, price) {
+        let item = window.cart.find(i => i.id === id);
+        if (item) {
+            item.qty++;
+        } else {
+            window.cart.push({ id, name, price, qty: 1 });
+        }
+        updateCartUI();
+        alert(name + ' added to cart!');
+    };
+
+    window.changeQty = function(index, amount) {
+        window.cart[index].qty += amount;
+        if (window.cart[index].qty === 0) {
+            window.cart.splice(index, 1);
+        }
+        updateCartUI();
+    };
+
+    window.toggleCart = function() {
+        const modal = document.getElementById('cart-modal');
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    };
+
+    window.showCheckoutForm = function() {
+        if(window.cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        document.getElementById('checkout-form-div').style.display = 'block';
+        toggleCart();
+    };
+      </script>
+    <script>
+    // 1. OTP LOGIC (Fast2SMS)
+    document.getElementById('send-otp-btn').addEventListener('click', async () => {
+        let phone = document.getElementById('phone-input').value.trim();
+        const apiKey = 'K25UNoxHgQnqIhjwtYSTEB7bcpVfkAF9J8iruvZXPCmsD3L4G0kuDcnpmysPZwCI7JMNq6QogBjOGAz4'; 
+        
+        phone = phone.replace(/\D/g, '');
+        if (phone.length === 12 && phone.startsWith('91')) {
+            phone = phone.slice(2);
+        } else if (phone.length === 13 && phone.startsWith('091')) {
+            phone = phone.slice(3);
+        }
+
+        if (phone.length !== 10) {
+            alert('Kripya sahi 10 digit ka mobile number dalein!');
+            return;
+        }
+
+        const generatedOtp = Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('savedOtp', generatedOtp);
+
+        const message = `Aapka UK TRENDS verification code hai: ${generatedOtp}`;
+        const url = `https://www.fast2sms.com/dev/bulkV2?route=q&message=${encodeURIComponent(message)}&language=english&flash=0&numbers=${phone}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    "authorization": apiKey,
+                    "cache-control": "no-cache"
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.return === true) {
+                alert('OTP successfully bhej diya gaya hai!');
+                document.getElementById('phone-step').style.display = 'none';
+                document.getElementById('otp-step').style.display = 'block';
+            } else {
+                alert('OTP bhejne mein error aayi: ' + (data.message || 'Unknown error'));
             }
-            updateCartUI();
-        };
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Network error aa gaya!');
+        }
+    });
 
-        window.toggleCart = function() {
-            const modal = document.getElementById('cart-modal');
-            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
-        };
+    document.getElementById('verify-otp-btn').addEventListener('click', () => {
+        const userInputOtp = document.getElementById('otp-input').value.trim();
+        const savedOtp = localStorage.getItem('savedOtp');
 
-        window.showCheckoutForm = function() {
-            if(window.cart.length === 0) {
-                alert("Your cart is empty!");
-                return;
-            }
-            document.getElementById('checkout-form-div').style.display = 'block';
-            toggleCart();
-        };
+        if (userInputOtp === savedOtp) {
+            alert('Login Successful! Welcome to UK TRENDS.');
+            document.getElementById('login-modal').style.display = 'none';
+        } else {
+            alert('Wrong OTP! Sahi OTP daalein.');
+        }
+    });
+
+    // 2. CART LOGIC
+    window.cart = [];
+
+    window.addToCart = function(id, name, price) {
+        let item = window.cart.find(i => i.id === id);
+        if (item) {
+            item.qty++;
+        } else {
+            window.cart.push({ id, name, price, qty: 1 });
+        }
+        updateCartUI();
+        alert(name + ' added to cart!');
+    };
+
+    window.changeQty = function(index, amount) {
+        window.cart[index].qty += amount;
+        if (window.cart[index].qty === 0) {
+            window.cart.splice(index, 1);
+        }
+        updateCartUI();
+    };
+
+    window.toggleCart = function() {
+        const modal = document.getElementById('cart-modal');
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    };
+
+    window.showCheckoutForm = function() {
+        if(window.cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        document.getElementById('checkout-form-div').style.display = 'block';
+        toggleCart();
+    };
     </script>
-</body>
-</html>
+    
+
+    
